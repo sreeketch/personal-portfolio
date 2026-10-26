@@ -1,0 +1,225 @@
+{
+  "profile": {
+    "name": "Sreeraj",
+    "title": "Character Designer & 3D Animator",
+    "headline": "Crafting Characters & Cinematic Worlds",
+    "tagline": "Bringing digital sculptures to life through movement, emotion, and story.",
+    "subheading": "Specialized in expressive character design, anatomical sculpting, and hyper-detailed Blender animations for games, film, and studios.",
+    "status": "Available for Select Commissions & Studio Contracts",
+    "location": "Remote / Worldwide",
+    "email": "sreeraj.3dart@gmail.com",
+    "heroStats": [
+      { "id": "01", "label": "Character Design", "desc": "From thumbnail silhouette to finished concept sheet" },
+      { "id": "02", "label": "3D Sculpting", "desc": "High-density digital clay & topological retopology" },
+      { "id": "03", "label": "Rigging & Motion", "desc": "Deformation rigs, facial blendshapes & keyframing" },
+      { "id": "04", "label": "Lookdev & Shading", "desc": "Physically based materials, groom & Cycles lighting" }
+    ],
+    "socials": [
+      { "platform": "ArtStation", "url": "https://artstation.com", "handle": "@sreeraj-3d" },
+      { "platform": "Instagram", "url": "https://instagram.com", "handle": "@sreeraj.3d" },
+      { "platform": "YouTube", "url": "https://youtube.com", "handle": "Sreeraj 3D Studio" },
+      { "platform": "BlenderArtists", "url": "https://blenderartists.org", "handle": "sreeraj" }
+    ]
+  },
+  "about": {
+    "bioParagraphs": [
+      "I am Sreeraj, a freelance 3D artist and character animator who uses Blender as my primary digital atelier. For over 6 years, I have shaped raw digital vertices into expressive, memorable characters with distinct personalities and weight.",
+      "My creative philosophy bridges classical figurative sculpting with cutting-edge real-time 3D pipelines. Whether designing stylized game protagonists, biomechanical creatures, or cinematic props, I engineer every model with production-clean quad topology, custom deformation rigging, and physically accurate lighting.",
+      "When I am not in the Blender 3D viewport sculpting or keyframing walk cycles, I experiment with custom procedural shader nodes, groom simulations, and real-time lighting in Unreal Engine."
+    ],
+    "skills": [
+      {
+        "category": "Character Design & Sculpting",
+        "level": 95,
+        "items": ["Silhouette Exploration", "Digital Anatomy", "ZBrush Hard Surface", "Blender Multires", "High-to-Low Baking"]
+      },
+      {
+        "category": "Topology & Asset Preparation",
+        "level": 92,
+        "items": ["Clean Quad Topology", "Deformation Loops", "UV Unwrapping & Packing", "LOD Generation", "Asset Optimization"]
+      },
+      {
+        "category": "Rigging & Animation",
+        "level": 90,
+        "items": ["Custom Bone Hierarchy", "IK/FK Switching", "Facial Blendshapes & ARKit", "Weight Painting", "Cinematic Keyframing"]
+      },
+      {
+        "category": "Lookdev, Groom & Shading",
+        "level": 88,
+        "items": ["Procedural Cycles Shaders", "Substance Painter Texturing", "Blender Geometry Hair Curves", "Volumetric Atmospheric Lighting"]
+      }
+    ],
+    "pipelineTools": [
+      { "name": "Blender 4.2 LTS", "role": "Primary 3D Suite & Animation Engine", "badge": "Core Engine" },
+      { "name": "ZBrush", "role": "Organic Anatomy & High-Res Sculpting", "badge": "Sculpt" },
+      { "name": "Unreal Engine 5", "role": "Real-Time Rendering & Cinematic Sequencer", "badge": "Game Engine" },
+      { "name": "Substance 3D Painter", "role": "PBR Material Texturing & Lookdev", "badge": "Materials" },
+      { "name": "Marvelous Designer", "role": "Realistic Cloth Simulation & Tailoring", "badge": "Cloth" }
+    ]
+  },
+  "showreel": {
+    "title": "2026 Character Animation & 3D Breakdown Reel",
+    "duration": "1:48",
+    "year": "2026",
+    "description": "A high-octane showcase featuring original 3D characters, cloth simulations, facial capture integration, and cinematic Blender Cycles renders.",
+    "videoUrl": "https://www.youtube.com/embed/dQw4w9WgXcQ",
+    "posterImage": "/placeholders/showreel-poster.jpg"
+  },
+  "process": [
+    {
+      "step": "01",
+      "name": "Concept & Silhouette",
+      "shortDesc": "Visual narrative, anatomical thumbnailing, and proportion studies.",
+      "details": "Every character starts with strong 2D shape language. I test multiple dynamic silhouettes to ensure instant readability before entering 3D space.",
+      "tools": ["Procreate", "Blender Grease Pencil"]
+    },
+    {
+      "step": "02",
+      "name": "Sculpt & Topology",
+      "shortDesc": "High-poly digital clay sculpted into clean, deformable quad topology.",
+      "details": "Using dynamic topology sculpting in Blender and ZBrush, I carve primary anatomical volumes and micro-skin wrinkles. I then retopologize with edge loops optimized for facial distortion and joint bends.",
+      "tools": ["Blender Multires", "RetopoFlow", "ZBrush"]
+    },
+    {
+      "step": "03",
+      "name": "Rigging & Deformation",
+      "shortDesc": "Bespoke bone armature, inverse kinematics, and facial blendshapes.",
+      "details": "A model without a rig is just a statue. I build articulated skeletons with IK/FK switching, corrective shape keys for elbows/shoulders, and 52 standard Apple ARKit blendshapes for facial animation.",
+      "tools": ["Auto-Rig Pro", "Blender Armatures", "Rigify"]
+    },
+    {
+      "step": "04",
+      "name": "Animation & Physics",
+      "shortDesc": "Keyframing emotion, secondary cloth dynamics, and weight distribution.",
+      "details": "Bringing life into the rig through nuanced timing, squash-and-stretch, anticipation, and secondary physical motion such as hair strand drag and cloth drapery.",
+      "tools": ["Blender Dope Sheet", "Graph Editor", "Geometry Nodes Sim"]
+    },
+    {
+      "step": "05",
+      "name": "Lighting & Shading",
+      "shortDesc": "3-point cinematic rim lighting, subsurface scattering, and final render.",
+      "details": "The signature ember look: careful placement of key lights, soft atmospheric fill, and molten rim lights to accentuate character contours and material roughness in Cycles X.",
+      "tools": ["Cycles X", "Substance Painter", "Compositor"]
+    }
+  ],
+  "categories": ["All", "Characters", "3D Animation", "Illustration"],
+  "projects": [
+    {
+      "id": "kaelen-cyber-ronin",
+      "title": "Kaelen: The Cyber Ronin",
+      "category": "Characters",
+      "subtitle": "Character Design, Sculpting & Hair Groom",
+      "description": "An original sci-fi character study combining traditional feudal armor motifs with modern cyberpunk augmentations. Features hand-painted PBR leather and weathered metal, 48k quad topology, and custom Blender Geometry Nodes hair grooming.",
+      "thumbnail": "/placeholders/work-01.jpg",
+      "modelUrl": "/models/kaelen-placeholder.glb",
+      "videoUrl": null,
+      "featured": true,
+      "year": "2026",
+      "polycount": "48,200 Quads",
+      "tools": ["Blender 4.2", "ZBrush", "Substance 3D", "Cycles"],
+      "stats": {
+        "Mesh Count": "14 Objects",
+        "Textures": "4 x 4K UDIMs",
+        "Rig": "Rigify Custom FK/IK",
+        "Render Time": "1.8 mins/frame"
+      }
+    },
+    {
+      "id": "aethelgard-creature-rig",
+      "title": "Aethelgard: Wyrmling Rig & Motion",
+      "category": "3D Animation",
+      "subtitle": "Creature Modeling, Rigging & Walk Study",
+      "description": "A quad-winged draconic creature engineered from skeleton to final flight animation. Built with an intricate multi-wing IK solver, automated tail physics, and layered breathing secondary motion.",
+      "thumbnail": "/placeholders/work-02.jpg",
+      "modelUrl": null,
+      "videoUrl": "https://www.youtube.com/embed/dQw4w9WgXcQ",
+      "featured": true,
+      "year": "2026",
+      "polycount": "72,500 Quads",
+      "tools": ["Blender 4.2", "Auto-Rig Pro", "EEVEE Next"],
+      "stats": {
+        "Bones": "184 Deformers",
+        "Anim Length": "240 Frames",
+        "Physics": "Cloth & Wing Jiggle",
+        "FPS": "60 fps real-time"
+      }
+    },
+    {
+      "id": "obsidian-chimera-lookdev",
+      "title": "Obsidian Chimera Lookdev",
+      "category": "Characters",
+      "subtitle": "Hard Surface Sculpt & Subsurface Shading",
+      "description": "Biomechanical specimen designed for a cinematic teaser. Features high-refraction obsidian crystal horns, translucent silicone muscle fibers, and internal volumetric bioluminescence.",
+      "thumbnail": "/placeholders/work-03.jpg",
+      "modelUrl": "/models/chimera-placeholder.glb",
+      "videoUrl": null,
+      "featured": true,
+      "year": "2026",
+      "polycount": "62,100 Quads",
+      "tools": ["Blender 4.2", "Substance Painter", "Cycles X"],
+      "stats": {
+        "Materials": "8 PBR Shader Nodes",
+        "Volumetrics": "Atmospheric Smoke",
+        "Render Engine": "Cycles X Path Tracing",
+        "Samples": "1024 Samples"
+      }
+    },
+    {
+      "id": "mecha-valkyrie-combat-idle",
+      "title": "Mecha Valkyrie: Combat Idle",
+      "category": "3D Animation",
+      "subtitle": "Keyframe Character Animation & Weighting",
+      "description": "High-impact combat readiness animation for a stylized battle mech. Explores natural balance shifting, hydraulic piston recoil, and dynamic cape physics simulated in Marvelous Designer.",
+      "thumbnail": "/placeholders/work-04.jpg",
+      "modelUrl": null,
+      "videoUrl": "https://www.youtube.com/embed/dQw4w9WgXcQ",
+      "featured": false,
+      "year": "2025",
+      "polycount": "38,400 Quads",
+      "tools": ["Blender 4.2", "Marvelous Designer", "Cycles"],
+      "stats": {
+        "Keyframes": "Custom Graph Curves",
+        "Cloth Res": "10mm Particle Distance",
+        "Rig": "Custom Hydraulic Armature"
+      }
+    },
+    {
+      "id": "relic-of-solitude",
+      "title": "Relic of Solitude",
+      "category": "Illustration",
+      "subtitle": "Atmospheric 3D Environment & Character Piece",
+      "description": "Narrative illustration of an ancient character guardian resting at the entrance of a subterranean temple. Focused on volumetric golden god-rays, stone moss micro-displacement, and emotional storytelling.",
+      "thumbnail": "/placeholders/work-05.jpg",
+      "modelUrl": null,
+      "videoUrl": null,
+      "featured": false,
+      "year": "2025",
+      "polycount": "110,000 Quads",
+      "tools": ["Blender 4.1", "Photoshop", "Cycles X"],
+      "stats": {
+        "Lighting": "Volumetric Fog + Rim",
+        "Resolution": "5120 x 2880 px",
+        "Color Space": "ACEScg"
+      }
+    },
+    {
+      "id": "seraphina-sorceress-bust",
+      "title": "Seraphina: The Starlight Mage",
+      "category": "Characters",
+      "subtitle": "Stylized Character Bust & Expression Study",
+      "description": "Expressive stylized character sculpt created for facial rigging research. Incorporates custom eye shaders with parallax iris depth and 52 FACS-based blendshapes for rich emotional performance.",
+      "thumbnail": "/placeholders/work-06.jpg",
+      "modelUrl": "/models/seraphina-placeholder.glb",
+      "videoUrl": null,
+      "featured": false,
+      "year": "2025",
+      "polycount": "28,600 Quads",
+      "tools": ["Blender 4.2", "ZBrush", "Substance Painter"],
+      "stats": {
+        "Blendshapes": "52 Apple ARKit",
+        "Hair": "Curves with Specular PBR",
+        "Textures": "2 x 4K Sets"
+      }
+    }
+  ]
+}
