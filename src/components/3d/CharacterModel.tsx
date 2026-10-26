@@ -1,26 +1,110 @@
 "use client";
 
-import React, { useRef, useMemo } from "react";
+import React, { useRef, useMemo, useEffect } from "react";
 import { useFrame } from "@react-three/fiber";
+import { useGLTF, useAnimations, Center } from "@react-three/drei";
 import * as THREE from "three";
 
 interface CharacterModelProps {
   autoRotate?: boolean;
 }
 
-export function CharacterModel({ autoRotate = true }: CharacterModelProps) {
-  const groupRef = useRef<THREE.Group>(null);
-  const visorRef = useRef<THREE.Mesh>(null);
-  const particlesRef = useRef<THREE.Points>(null);
+// Support GitHub Pages subpath and localhost
+function getAssetPath(path: string) {
+  const envBase = process.env.NEXT_PUBLIC_BASE_PATH || "";
+  if (typeof window !== "undefined" && window.location.pathname.startsWith("/personal-portfolio")) {
+    return `/personal-portfolio${path}`;
+  }
+  if (envBase) {
+    return `${envBase}${path}`;
+  }
+  return path;
+}
 
-  // Generate 60 warm ember particles floating around the character
-  const particleCount = 60;
+const MODEL_PATH = "/models/boy-24-bust.glb";
+const DRACO_PATH = "/draco/";
+
+function BoyModel() {
+  const modelUrl = getAssetPath(MODEL_PATH);
+  const dracoUrl = getAssetPath(DRACO_PATH);
+  const { scene, animations } = useGLTF(modelUrl, dracoUrl);
+  const groupRef = useRef<THREE.Group>(null);
+  const { actions } = useAnimations(animations, groupRef);
+
+  useEffect(() => {
+    const box = new THREE.Box3().setFromObject(scene);
+    const size = new THREE.Vector3();
+    const center = new THREE.Vector3();
+    box.getSize(size);
+    box.getCenter(center);
+    console.log("=== BOY MODEL STATS ===");
+    console.log("Size:", JSON.stringify(size));
+    console.log("Center:", JSON.stringify(center));
+  }, [scene]);
+
+  // Play subtle idle eye animation if available
+  useEffect(() => {
+    if (actions) {
+      const eyeAction = actions["idle_eyes"] || actions["idle_eyes_2"];
+      if (eyeAction) {
+        eyeAction.reset().fadeIn(0.5).play();
+      }
+    }
+  }, [actions]);
+
+  // Hide detached hand bones if present in bust avatar
+  useEffect(() => {
+    const rightHand = scene.getObjectByName("RightHand");
+    const leftHand = scene.getObjectByName("LeftHand");
+    if (rightHand) rightHand.scale.set(0, 0, 0);
+    if (leftHand) leftHand.scale.set(0, 0, 0);
+  }, [scene]);
+  useEffect(() => {
+    scene.traverse((child) => {
+      if ((child as THREE.Mesh).isMesh) {
+        child.castShadow = true;
+        child.receiveShadow = true;
+        const mesh = child as THREE.Mesh;
+        if (mesh.material) {
+          const mat = mesh.material as THREE.MeshStandardMaterial;
+          mat.envMapIntensity = 1.2;
+          mat.needsUpdate = true;
+        }
+      }
+    });
+  }, [scene]);
+
+  return (
+    <group ref={groupRef}>
+      <Center position={[0, -0.05, 0]}>
+        <primitive object={scene} scale={4.2} />
+      </Center>
+    </group>
+  );
+}
+
+export function CharacterModel({ autoRotate = true }: CharacterModelProps) {
+  const outerGroupRef = useRef<THREE.Group>(null);
+  const particlesRef = useRef<THREE.Points>(null);
+  const scrollOffsetRef = useRef(0);
+
+  // Track window scroll for subtle depth and rotation reactivity
+  useEffect(() => {
+    const handleScroll = () => {
+      scrollOffsetRef.current = window.scrollY;
+    };
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  // Generate 45 warm ember particles floating around the character
+  const particleCount = 45;
   const particlePositions = useMemo(() => {
     const positions = new Float32Array(particleCount * 3);
     for (let i = 0; i < particleCount; i++) {
-      positions[i * 3] = (Math.random() - 0.5) * 4;
-      positions[i * 3 + 1] = (Math.random() - 0.5) * 4 - 0.5;
-      positions[i * 3 + 2] = (Math.random() - 0.5) * 3;
+      positions[i * 3] = (Math.random() - 0.5) * 3.8;
+      positions[i * 3 + 1] = (Math.random() - 0.5) * 3.5 - 0.2;
+      positions[i * 3 + 2] = (Math.random() - 0.5) * 2.8;
     }
     return positions;
   }, []);
@@ -28,25 +112,40 @@ export function CharacterModel({ autoRotate = true }: CharacterModelProps) {
   useFrame((state, delta) => {
     const t = state.clock.getElapsedTime();
 
-    // Subtle breathing float and idle sway
-    if (groupRef.current && autoRotate) {
-      groupRef.current.position.y = Math.sin(t * 1.2) * 0.08 - 0.2;
-      groupRef.current.rotation.y += delta * 0.45;
-    }
+    if (outerGroupRef.current) {
+      // Subtle organic breathing float
+      const breath = Math.sin(t * 1.4) * 0.04;
+      
+      // Dynamic scroll lerp: subtle Y-rotation and slight depth tilt
+      const targetScrollY = Math.min(scrollOffsetRef.current * 0.0008, 0.4);
+      const targetScrollRot = scrollOffsetRef.current * 0.0012;
 
-    // Visor subtle pulsation
-    if (visorRef.current) {
-      const pulse = 1.8 + Math.sin(t * 3.0) * 0.4;
-      (visorRef.current.material as THREE.MeshStandardMaterial).emissiveIntensity = pulse;
+      outerGroupRef.current.position.y = breath - targetScrollY;
+      outerGroupRef.current.rotation.x = THREE.MathUtils.lerp(
+        outerGroupRef.current.rotation.x,
+        targetScrollY * 0.35,
+        0.08
+      );
+
+      // Auto-rotation turntable when enabled
+      if (autoRotate) {
+        outerGroupRef.current.rotation.y += delta * 0.4;
+      } else {
+        outerGroupRef.current.rotation.y = THREE.MathUtils.lerp(
+          outerGroupRef.current.rotation.y,
+          targetScrollRot,
+          0.05
+        );
+      }
     }
 
     // Animate particles drifting upward
     if (particlesRef.current) {
       const positions = particlesRef.current.geometry.attributes.position.array as Float32Array;
       for (let i = 0; i < particleCount; i++) {
-        positions[i * 3 + 1] += delta * 0.35; // Move up
-        if (positions[i * 3 + 1] > 2.5) {
-          positions[i * 3 + 1] = -2.0; // Reset to bottom
+        positions[i * 3 + 1] += delta * 0.3;
+        if (positions[i * 3 + 1] > 2.2) {
+          positions[i * 3 + 1] = -1.8;
         }
       }
       particlesRef.current.geometry.attributes.position.needsUpdate = true;
@@ -54,94 +153,9 @@ export function CharacterModel({ autoRotate = true }: CharacterModelProps) {
   });
 
   return (
-    <group ref={groupRef} position={[0, -0.2, 0]} scale={1.15}>
-      {/* ===================== CHARACTER BUST ===================== */}
-
-      {/* Head / Helmet Base (Sculpted Obsidian Polygon Structure) */}
-      <mesh position={[0, 1.1, 0]} castShadow receiveShadow>
-        <octahedronGeometry args={[0.75, 2]} />
-        <meshStandardMaterial
-          color="#16161D"
-          metalness={0.88}
-          roughness={0.22}
-          wireframe={false}
-        />
-      </mesh>
-
-      {/* Glowing Cybernetic Visor / Eye Slit (Signature Ember Glow) */}
-      <mesh ref={visorRef} position={[0, 1.18, 0.62]}>
-        <boxGeometry args={[0.62, 0.12, 0.15]} />
-        <meshStandardMaterial
-          color="#FF5500"
-          emissive="#FF5500"
-          emissiveIntensity={2.2}
-          roughness={0.1}
-          metalness={0.5}
-        />
-      </mesh>
-
-      {/* Armored Collar & Cervical Spine */}
-      <mesh position={[0, 0.45, 0]} castShadow receiveShadow>
-        <cylinderGeometry args={[0.42, 0.65, 0.6, 8]} />
-        <meshStandardMaterial
-          color="#101015"
-          metalness={0.92}
-          roughness={0.3}
-        />
-      </mesh>
-
-      {/* Torso & Shoulder Plating (Broad Heroic Anatomy) */}
-      <mesh position={[0, -0.2, 0]} castShadow receiveShadow>
-        <boxGeometry args={[1.7, 0.9, 0.85]} />
-        <meshStandardMaterial
-          color="#181822"
-          metalness={0.85}
-          roughness={0.35}
-        />
-      </mesh>
-
-      {/* Left Shoulder Pauldron */}
-      <mesh position={[-1.05, 0.05, 0]} rotation={[0, 0, 0.25]} castShadow>
-        <octahedronGeometry args={[0.55, 1]} />
-        <meshStandardMaterial
-          color="#121218"
-          metalness={0.95}
-          roughness={0.2}
-        />
-      </mesh>
-
-      {/* Right Shoulder Pauldron */}
-      <mesh position={[1.05, 0.05, 0]} rotation={[0, 0, -0.25]} castShadow>
-        <octahedronGeometry args={[0.55, 1]} />
-        <meshStandardMaterial
-          color="#121218"
-          metalness={0.95}
-          roughness={0.2}
-        />
-      </mesh>
-
-      {/* Core Power Reactor / Chest Jewel (Amber Pulse) */}
-      <mesh position={[0, -0.15, 0.45]}>
-        <octahedronGeometry args={[0.18, 0]} />
-        <meshStandardMaterial
-          color="#FF7A1A"
-          emissive="#FF7A1A"
-          emissiveIntensity={2.5}
-          roughness={0.1}
-        />
-      </mesh>
-
-      {/* Floating Orbital Halo Ring (Blender Viewport / Wireframe Homage) */}
-      <mesh position={[0, 1.25, 0]} rotation={[Math.PI / 3, 0, 0]}>
-        <torusGeometry args={[1.05, 0.015, 16, 64]} />
-        <meshStandardMaterial
-          color="#FF8547"
-          emissive="#FF6B2B"
-          emissiveIntensity={1.2}
-          transparent
-          opacity={0.7}
-        />
-      </mesh>
+    <group ref={outerGroupRef} position={[0, 0, 0]}>
+      {/* Boy 24 Character Model */}
+      <BoyModel />
 
       {/* Floating Ember Spark Particles */}
       <points ref={particlesRef}>
@@ -152,19 +166,22 @@ export function CharacterModel({ autoRotate = true }: CharacterModelProps) {
           />
         </bufferGeometry>
         <pointsMaterial
-          size={0.045}
+          size={0.04}
           color="#FF6B2B"
           transparent
-          opacity={0.85}
+          opacity={0.8}
           blending={THREE.AdditiveBlending}
         />
       </points>
 
-      {/* Shadow Catcher Plane under Character */}
-      <mesh position={[0, -1.15, 0]} rotation={[-Math.PI / 2, 0, 0]} receiveShadow>
+      {/* Shadow Catcher Ground Plane */}
+      <mesh position={[0, -1.3, 0]} rotation={[-Math.PI / 2, 0, 0]} receiveShadow>
         <planeGeometry args={[6, 6]} />
-        <shadowMaterial opacity={0.4} />
+        <shadowMaterial opacity={0.35} />
       </mesh>
     </group>
   );
 }
+
+// Preload model asset for immediate smooth display
+useGLTF.preload(getAssetPath(MODEL_PATH), getAssetPath(DRACO_PATH));

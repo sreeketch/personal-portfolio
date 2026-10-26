@@ -7,11 +7,9 @@ import {
   ChevronLeft,
   ChevronRight,
   Box,
-  Film,
-  Sparkles,
-  ExternalLink,
   Layers,
-  RotateCw,
+  Sparkles,
+  Maximize2,
 } from "lucide-react";
 
 interface ProjectModalProps {
@@ -23,6 +21,8 @@ interface ProjectModalProps {
   hasNext: boolean;
 }
 
+type ShaderMode = "shaded" | "wireframe" | "clay";
+
 export function ProjectModal({
   project,
   onClose,
@@ -31,17 +31,16 @@ export function ProjectModal({
   hasPrev,
   hasNext,
 }: ProjectModalProps) {
-  const [wireframeMode, setWireframeMode] = useState(false);
+  const [shaderMode, setShaderMode] = useState<ShaderMode>("shaded");
+  const [isRotating, setIsRotating] = useState(true);
   const modalRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (!project) return;
 
-    // Lock body scroll
     const originalOverflow = document.body.style.overflow;
     document.body.style.overflow = "hidden";
 
-    // Keyboard navigation (ESC, ArrowLeft, ArrowRight)
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === "Escape") {
         onClose();
@@ -66,7 +65,7 @@ export function ProjectModal({
       role="dialog"
       aria-modal="true"
       aria-labelledby="modal-title"
-      className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 md:p-8 bg-black/85 backdrop-blur-xl animate-in fade-in duration-200"
+      className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 md:p-8 bg-black/85 backdrop-blur-2xl animate-in fade-in duration-200"
       onClick={(e) => {
         if (e.target === e.currentTarget) onClose();
       }}
@@ -74,12 +73,12 @@ export function ProjectModal({
       {/* Modal Dialog Card */}
       <div
         ref={modalRef}
-        className="relative w-full max-w-5xl max-h-[92vh] overflow-y-auto rounded-3xl bg-[#0E0E12] border border-[#272730] shadow-2xl text-[#E2E8F0] flex flex-col focus:outline-none"
+        className="relative w-full max-w-4xl max-h-[90vh] overflow-y-auto rounded-3xl bg-[#0C0C0F] border border-white/[0.1] shadow-2xl text-[#E2E8F0] flex flex-col focus:outline-none"
       >
-        {/* Modal Top Header Bar */}
-        <div className="sticky top-0 z-20 flex items-center justify-between px-6 py-4 bg-[#0E0E12]/95 backdrop-blur-md border-b border-[#272730]">
+        {/* Header */}
+        <div className="sticky top-0 z-20 flex items-center justify-between px-6 py-4 bg-[#0C0C0F]/90 backdrop-blur-md border-b border-white/[0.08]">
           <div className="flex items-center gap-3">
-            <span className="font-mono text-xs px-2.5 py-1 rounded-full bg-[#1C1C22] text-[#FF8547] border border-[#272730]">
+            <span className="font-mono text-xs px-2.5 py-0.5 rounded-full bg-white/[0.05] text-[#FF8547] border border-white/[0.08]">
               {project.category}
             </span>
             <span className="font-mono text-xs text-[#768597]">
@@ -94,7 +93,7 @@ export function ProjectModal({
                 type="button"
                 onClick={onNavigatePrev}
                 disabled={!hasPrev}
-                className="w-8 h-8 rounded-full bg-[#141418] border border-[#272730] flex items-center justify-center text-white disabled:opacity-30 hover:border-[#FF6B2B] transition-colors"
+                className="w-8 h-8 rounded-full bg-white/[0.04] border border-white/[0.08] flex items-center justify-center text-white disabled:opacity-20 hover:border-[#FF6B2B] transition-colors"
                 aria-label="Previous project"
               >
                 <ChevronLeft className="w-4 h-4" />
@@ -103,18 +102,17 @@ export function ProjectModal({
                 type="button"
                 onClick={onNavigateNext}
                 disabled={!hasNext}
-                className="w-8 h-8 rounded-full bg-[#141418] border border-[#272730] flex items-center justify-center text-white disabled:opacity-30 hover:border-[#FF6B2B] transition-colors"
+                className="w-8 h-8 rounded-full bg-white/[0.04] border border-white/[0.08] flex items-center justify-center text-white disabled:opacity-20 hover:border-[#FF6B2B] transition-colors"
                 aria-label="Next project"
               >
                 <ChevronRight className="w-4 h-4" />
               </button>
             </div>
 
-            {/* Close Button */}
             <button
               type="button"
               onClick={onClose}
-              className="w-8 h-8 rounded-full bg-[#1C1C22] hover:bg-[#FF6B2B] hover:text-[#08080A] text-[#94A3B8] flex items-center justify-center border border-[#272730] transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[#FF8547]"
+              className="w-8 h-8 rounded-full bg-white/[0.05] hover:bg-[#FF6B2B] hover:text-[#08080A] text-[#94A3B8] flex items-center justify-center border border-white/[0.08] transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[#FF8547]"
               aria-label="Close modal dialog"
             >
               <X className="w-4 h-4" />
@@ -122,12 +120,11 @@ export function ProjectModal({
           </div>
         </div>
 
-        {/* Modal Main Content */}
-        <div className="p-6 sm:p-8 space-y-8">
-          {/* Media Showcase Stage (3D Viewer or Video Embed) */}
-          <div className="relative aspect-video rounded-2xl bg-[#08080A] border border-[#272730] overflow-hidden flex items-center justify-center">
+        {/* Modal Body */}
+        <div className="p-6 sm:p-8 space-y-7">
+          {/* 3D Model Stage or Video Embed */}
+          <div className="relative aspect-video rounded-2xl bg-[#08080A] border border-white/[0.08] overflow-hidden flex items-center justify-center select-none">
             {project.videoUrl ? (
-              /* Video Player */
               <iframe
                 src={`${project.videoUrl}?autoplay=1&rel=0`}
                 title={project.title}
@@ -136,63 +133,70 @@ export function ProjectModal({
                 allowFullScreen
               />
             ) : (
-              /* 3D Model Inspection Stage */
-              <div className="relative w-full h-full flex flex-col items-center justify-center p-6 text-center select-none">
-                {/* Radial Lighting Glow */}
-                <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_50%_50%,rgba(255,107,43,0.2)_0%,transparent_70%)] pointer-events-none" />
+              <div className="relative w-full h-full flex flex-col items-center justify-center p-6 text-center">
+                {/* Radial Glow */}
+                <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_50%_50%,rgba(255,107,43,0.18)_0%,transparent_70%)] pointer-events-none" />
 
-                {/* 3D Model Representation / Inspection Mesh */}
+                {/* Interactive 3D Model Representation */}
                 <div
-                  className={`w-32 h-32 rounded-3xl bg-[#141418] border-2 flex items-center justify-center shadow-2xl transition-all duration-300 ${
-                    wireframeMode
-                      ? "border-[#FF6B2B] shadow-[0_0_30px_rgba(255,107,43,0.35)]"
-                      : "border-[#272730]"
+                  className={`w-36 h-36 rounded-3xl flex items-center justify-center transition-all duration-300 ${
+                    shaderMode === "wireframe"
+                      ? "bg-[#0A0A0E] border-2 border-[#FF6B2B] shadow-[0_0_30px_rgba(255,107,43,0.35)]"
+                      : shaderMode === "clay"
+                      ? "bg-[#2A2A30] border-2 border-[#60606A] shadow-xl"
+                      : "bg-[#141418] border-2 border-white/[0.1] shadow-2xl"
                   }`}
                 >
                   <Box
-                    className={`w-16 h-16 transition-colors ${
-                      wireframeMode ? "text-[#FF8547]" : "text-white"
+                    className={`w-18 h-18 transition-colors ${
+                      shaderMode === "wireframe"
+                        ? "text-[#FF8547]"
+                        : shaderMode === "clay"
+                        ? "text-[#E2E8F0]"
+                        : "text-[#FF6B2B]"
                     }`}
                   />
                 </div>
 
-                <div className="mt-4 space-y-1">
+                <div className="mt-4 space-y-0.5">
                   <p className="font-display font-bold text-base text-white">
                     {project.title}
                   </p>
                   <p className="font-mono text-xs text-[#FF6B2B]">
-                    {wireframeMode ? "Wireframe Topology Mode" : "PBR Shaded Mode"}
+                    {shaderMode === "wireframe"
+                      ? "Wireframe Quad Topology (Clean Deformations)"
+                      : shaderMode === "clay"
+                      ? "Digital Clay Shader (Anatomical Volume Check)"
+                      : "Cycles X Physically Based Shading"}
                   </p>
                 </div>
 
-                {/* Micro Stage Controls */}
-                <div className="absolute bottom-4 right-4 flex items-center gap-2">
-                  <button
-                    type="button"
-                    onClick={() => setWireframeMode(!wireframeMode)}
-                    className={`px-3 py-1.5 rounded-full text-xs font-mono border transition-colors flex items-center gap-1.5 ${
-                      wireframeMode
-                        ? "bg-[#FF6B2B] text-[#08080A] border-[#FF6B2B] font-semibold"
-                        : "bg-[#141418] text-[#94A3B8] border-[#272730] hover:text-white"
-                    }`}
-                  >
-                    <Layers className="w-3.5 h-3.5" />
-                    <span>{wireframeMode ? "Solid Shading" : "Wireframe Mode"}</span>
-                  </button>
+                {/* Shader Viewport Switchers */}
+                <div className="absolute bottom-4 right-4 flex items-center gap-1.5 p-1 rounded-full bg-[#0E0E12]/90 border border-white/[0.08] backdrop-blur-md">
+                  {(["shaded", "wireframe", "clay"] as ShaderMode[]).map((mode) => (
+                    <button
+                      key={mode}
+                      type="button"
+                      onClick={() => setShaderMode(mode)}
+                      className={`px-3 py-1 rounded-full text-[11px] font-mono capitalize transition-all ${
+                        shaderMode === mode
+                          ? "bg-[#FF6B2B] text-[#08080A] font-bold"
+                          : "text-[#94A3B8] hover:text-white"
+                      }`}
+                    >
+                      {mode}
+                    </button>
+                  ))}
                 </div>
               </div>
             )}
           </div>
 
-          {/* Project Details Grid */}
+          {/* Details & Specifications Grid */}
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-            {/* Left 8 Cols: Title, Subtitle, Full Narrative */}
             <div className="lg:col-span-8 space-y-4">
               <div className="space-y-1">
-                <h3
-                  id="modal-title"
-                  className="font-display font-extrabold text-2xl sm:text-3xl text-white"
-                >
+                <h3 id="modal-title" className="font-display font-extrabold text-2xl text-white">
                   {project.title}
                 </h3>
                 <p className="font-mono text-xs text-[#FF6B2B]">
@@ -200,20 +204,19 @@ export function ProjectModal({
                 </p>
               </div>
 
-              <p className="text-sm sm:text-base text-[#94A3B8] leading-relaxed">
+              <p className="text-sm text-[#94A3B8] leading-relaxed">
                 {project.description}
               </p>
 
-              {/* Software Tools Employed */}
               <div className="pt-2">
-                <span className="font-mono text-xs text-[#768597] block mb-2 uppercase tracking-wider">
+                <span className="font-mono text-[11px] uppercase tracking-wider text-[#768597] block mb-2">
                   Pipeline & Shaders:
                 </span>
-                <div className="flex flex-wrap gap-2">
+                <div className="flex flex-wrap gap-1.5">
                   {project.tools.map((tool) => (
                     <span
                       key={tool}
-                      className="text-xs font-mono px-3 py-1 rounded-full bg-[#141418] text-[#E2E8F0] border border-[#272730]"
+                      className="text-xs font-mono px-3 py-1 rounded-full bg-white/[0.03] text-[#E2E8F0] border border-white/[0.08]"
                     >
                       {tool}
                     </span>
@@ -222,28 +225,21 @@ export function ProjectModal({
               </div>
             </div>
 
-            {/* Right 4 Cols: Technical Metadata Specs */}
-            <div className="lg:col-span-4 p-5 rounded-2xl bg-[#141418] border border-[#272730] space-y-3">
-              <span className="font-mono text-xs text-[#FF6B2B] uppercase tracking-wider block border-b border-[#272730] pb-2">
+            {/* Technical Specifications Drawer */}
+            <div className="lg:col-span-4 p-5 rounded-2xl bg-white/[0.02] border border-white/[0.08] space-y-3">
+              <span className="font-mono text-[11px] uppercase tracking-wider text-[#FF6B2B] block border-b border-white/[0.06] pb-2">
                 Asset Specifications
               </span>
               <div className="space-y-2 text-xs">
-                <div className="flex justify-between py-1 border-b border-[#272730]/40">
+                <div className="flex justify-between py-1 border-b border-white/[0.04]">
                   <span className="text-[#768597]">Polycount</span>
-                  <span className="font-mono text-white font-medium">
-                    {project.polycount}
-                  </span>
+                  <span className="font-mono text-white font-medium">{project.polycount}</span>
                 </div>
                 {project.stats &&
                   Object.entries(project.stats).map(([k, v]) => (
-                    <div
-                      key={k}
-                      className="flex justify-between py-1 border-b border-[#272730]/40"
-                    >
+                    <div key={k} className="flex justify-between py-1 border-b border-white/[0.04]">
                       <span className="text-[#768597]">{k}</span>
-                      <span className="font-mono text-white font-medium">
-                        {v}
-                      </span>
+                      <span className="font-mono text-white font-medium">{v}</span>
                     </div>
                   ))}
               </div>

@@ -52,70 +52,75 @@ export function HeroCanvas() {
     };
   }, []);
 
-  // Graceful degradation decision
-  const shouldShowFallback =
-    !isClient ||
-    !webGLSupported ||
-    ((prefersReducedMotion || isMobile) && !forceLive);
+  // Graceful degradation decision: only fallback if WebGL is genuinely unavailable
+  const shouldShowFallback = !isClient || !webGLSupported;
 
   if (shouldShowFallback) {
-    const reason = !webGLSupported
-      ? "WebGL is not enabled on this device"
-      : prefersReducedMotion
-      ? "Displaying static preview per reduced-motion preference"
-      : "Optimized 2D preview for mobile device performance";
-
     return (
       <PosterFallback
-        reason={reason}
-        onEnableLive={
-          webGLSupported ? () => setForceLive(true) : undefined
-        }
+        reason="WebGL is not enabled on this device"
       />
     );
   }
 
   return (
-    <div className="relative w-full h-[400px] sm:h-[480px] md:h-[540px] rounded-2xl bg-[#08080A] border border-[#272730] overflow-hidden select-none group shadow-2xl">
-      {/* Background Radial Glow */}
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_45%,rgba(255,107,43,0.28)_0%,rgba(224,83,22,0.12)_45%,transparent_75%)] pointer-events-none" />
+    <div
+      data-cursor="orbit"
+      className="relative w-full h-[420px] sm:h-[480px] lg:h-[500px] select-none flex items-center justify-center"
+    >
+      {/* Soft Borderless Ambient Radial Glow & Floor Contact Shadow */}
+      <div className="absolute inset-0 -z-10 pointer-events-none flex items-center justify-center">
+        {/* Soft volumetric warm ember aura */}
+        <div className="w-[320px] sm:w-[440px] h-[320px] sm:h-[440px] rounded-full bg-[radial-gradient(circle,rgba(255,107,43,0.18)_0%,rgba(255,133,71,0.05)_48%,transparent_70%)] blur-3xl" />
+        {/* Grounded soft floor drop shadow */}
+        <div className="absolute bottom-6 sm:bottom-8 w-[240px] sm:w-[340px] h-8 rounded-[100%] bg-[radial-gradient(ellipse,rgba(0,0,0,0.7)_0%,rgba(0,0,0,0.2)_40%,transparent_75%)] blur-lg" />
+      </div>
 
-      {/* React Three Fiber Canvas */}
-      <Canvas
-        camera={{ position: [0, 1.0, 3.8], fov: 44 }}
-        gl={{
-          antialias: true,
-          alpha: true,
-          powerPreference: "high-performance",
+      {/* React Three Fiber Canvas with Soft Perimeter Fade Mask (Zero Box Boundary) */}
+      <div
+        className="w-full h-full"
+        style={{
+          maskImage: "radial-gradient(ellipse 88% 86% at 50% 50%, black 72%, transparent 100%)",
+          WebkitMaskImage: "radial-gradient(ellipse 88% 86% at 50% 50%, black 72%, transparent 100%)",
         }}
-        dpr={[1, 2]} // Max 2x DPR for battery/GPU performance
-        role="img"
-        aria-label="Interactive 3D model of Sreeraj original character. Drag to rotate turntable. Mouse wheel zoom is disabled to preserve page scrolling."
-        className="cursor-grab active:cursor-grabbing"
       >
-        <Suspense fallback={<Loader3D />}>
-          <LightingRig />
-          <CharacterModel autoRotate={autoRotate} />
-          <Preload all />
-        </Suspense>
+        <Canvas
+          camera={{ position: [0, 0.7, 4.6], fov: 38 }}
+          gl={{
+            antialias: true,
+            alpha: true,
+            powerPreference: "high-performance",
+          }}
+          dpr={[1, 2]} // Max 2x DPR for battery/GPU performance
+          role="img"
+          aria-label="Interactive 3D model of Sreeraj original character. Drag to rotate turntable. Mouse wheel zoom is disabled to preserve page scrolling."
+          className="w-full h-full cursor-grab active:cursor-grabbing"
+        >
+          <Suspense fallback={<Loader3D />}>
+            <LightingRig />
+            <CharacterModel autoRotate={autoRotate} />
+            <Preload all />
+          </Suspense>
 
-        <OrbitControls
-          enableZoom={false} // Prevents scroll hijacking on page scroll!
-          enablePan={false}
-          dampingFactor={0.06}
-          minPolarAngle={Math.PI / 4}
-          maxPolarAngle={Math.PI / 1.7}
-          autoRotate={autoRotate}
-          autoRotateSpeed={0.9}
-        />
-      </Canvas>
+          <OrbitControls
+            target={[0, 0.25, 0]}
+            enableZoom={false} // Prevents scroll hijacking on page scroll!
+            enablePan={false}
+            dampingFactor={0.06}
+            minPolarAngle={Math.PI / 3.2}
+            maxPolarAngle={Math.PI / 1.8}
+            autoRotate={autoRotate}
+            autoRotateSpeed={0.9}
+          />
+        </Canvas>
+      </div>
 
-      {/* Micro Control Overlay (Top Right) */}
-      <div className="absolute top-4 right-4 z-10 flex items-center gap-1.5 p-1 rounded-full bg-[#141418]/80 backdrop-blur-md border border-[#272730] shadow-lg">
+      {/* Floating Micro Controls (Top Right) */}
+      <div className="absolute top-3 right-3 z-10 flex items-center gap-1.5 p-1 rounded-full bg-white/[0.04] backdrop-blur-md border border-white/[0.08] shadow-lg">
         {/* Toggle Auto-Rotation */}
         <button
           onClick={() => setAutoRotate(!autoRotate)}
-          className={`w-8 h-8 rounded-full flex items-center justify-center text-xs transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[#FF8547] ${
+          className={`w-7 h-7 rounded-full flex items-center justify-center text-xs transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[#FF8547] ${
             autoRotate
               ? "bg-[#FF6B2B] text-[#08080A]"
               : "text-[#94A3B8] hover:text-white"
@@ -129,7 +134,7 @@ export function HeroCanvas() {
         {/* Device Switch to Poster */}
         <button
           onClick={() => setForceLive(false)}
-          className="w-8 h-8 rounded-full flex items-center justify-center text-xs text-[#94A3B8] hover:text-white transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[#FF8547]"
+          className="w-7 h-7 rounded-full flex items-center justify-center text-xs text-[#94A3B8] hover:text-white transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[#FF8547]"
           title="Switch to Static 2D Poster"
           aria-label="Switch to 2D view"
         >
@@ -137,15 +142,12 @@ export function HeroCanvas() {
         </button>
       </div>
 
-      {/* Bottom Status Ticker */}
-      <div className="absolute bottom-4 inset-x-6 z-10 flex items-center justify-between text-[11px] font-mono text-[#94A3B8] pointer-events-none">
-        <div className="flex items-center gap-2">
-          <span className="w-2 h-2 rounded-full bg-[#22C55E] animate-pulse" />
-          <span>Interactive 3D Turntable (Drag to Orbit)</span>
+      {/* Floating Bottom Status Pill */}
+      <div className="absolute bottom-2 inset-x-0 z-10 flex items-center justify-center pointer-events-none">
+        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/[0.04] backdrop-blur-md border border-white/[0.08] text-[11px] font-mono text-[#94A3B8]">
+          <span className="w-1.5 h-1.5 rounded-full bg-[#FF6B2B] animate-pulse" />
+          <span>Interactive 3D Turntable • Drag to Orbit</span>
         </div>
-        <span className="text-[#FF6B2B] hidden sm:inline">
-          Blender 4.2 LTS / Three.js
-        </span>
       </div>
     </div>
   );

@@ -2,89 +2,110 @@
 
 import React, { useEffect } from "react";
 import { gsap } from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 export function MotionProvider({ children }: { children: React.ReactNode }) {
   useEffect(() => {
-    // Register GSAP ScrollTrigger
-    gsap.registerPlugin(ScrollTrigger);
+    const cleanups: (() => void)[] = [];
+    const isDesktop = typeof window !== "undefined" && window.matchMedia("(pointer: fine)").matches;
 
-    // Responsive & Accessible motion configuration
-    const mm = gsap.matchMedia();
+    // 1. Clamped Magnetic CTA Pull on Desktop
+    if (isDesktop) {
+      const magneticButtons = document.querySelectorAll<HTMLElement>(".btn-primary-ember");
 
-    mm.add("(prefers-reduced-motion: no-preference)", () => {
-      // 1. Staggered Scroll Reveal for Section Headlines
-      gsap.utils.toArray<HTMLElement>("h2").forEach((heading) => {
-        gsap.from(heading, {
-          scrollTrigger: {
-            trigger: heading,
-            start: "top 88%",
-            toggleActions: "play none none reverse",
-          },
-          opacity: 0,
-          y: 16,
-          duration: 0.45,
-          ease: "power2.out",
+      magneticButtons.forEach((btn) => {
+        const xTo = gsap.quickTo(btn, "x", { duration: 0.3, ease: "power3" });
+        const yTo = gsap.quickTo(btn, "y", { duration: 0.3, ease: "power3" });
+
+        const handleMouseMove = (e: MouseEvent) => {
+          const rect = btn.getBoundingClientRect();
+          const x = e.clientX - (rect.left + rect.width / 2);
+          const y = e.clientY - (rect.top + rect.height / 2);
+          xTo(x * 0.25);
+          yTo(y * 0.25);
+        };
+
+        const handleMouseLeave = () => {
+          xTo(0);
+          yTo(0);
+        };
+
+        btn.addEventListener("mousemove", handleMouseMove);
+        btn.addEventListener("mouseleave", handleMouseLeave);
+
+        cleanups.push(() => {
+          btn.removeEventListener("mousemove", handleMouseMove);
+          btn.removeEventListener("mouseleave", handleMouseLeave);
         });
       });
+    }
 
-      // 2. Project Cards Stagger Entrance
-      const cards = gsap.utils.toArray<HTMLElement>(".project-card-3d");
-      if (cards.length > 0) {
-        gsap.from(cards, {
-          scrollTrigger: {
-            trigger: "#works",
-            start: "top 80%",
-            toggleActions: "play none none reverse",
-          },
-          opacity: 0,
-          y: 20,
-          duration: 0.4,
-          stagger: 0.08,
-          ease: "power3.out",
-          clearProps: "transform",
-        });
-      }
+    // 2. Global 3D Perspective Scroll Engine (Gives the whole website an authentic 3D spatial feel)
+    const cards3D = document.querySelectorAll<HTMLElement>('[data-3d-scroll="card"]');
+    let animationFrameId: number;
+    let targetScroll = window.scrollY;
+    let currentScroll = window.scrollY;
 
-      // 3. Clamped Magnetic CTA Pull on Desktop
-      if (window.matchMedia("(pointer: fine)").matches) {
-        const magneticButtons = document.querySelectorAll<HTMLElement>(".btn-primary-ember");
+    const onScroll = () => {
+      targetScroll = window.scrollY;
+    };
+    window.addEventListener("scroll", onScroll, { passive: true });
+    cleanups.push(() => window.removeEventListener("scroll", onScroll));
 
-        magneticButtons.forEach((btn) => {
-          const xTo = gsap.quickTo(btn, "x", { duration: 0.3, ease: "power3" });
-          const yTo = gsap.quickTo(btn, "y", { duration: 0.3, ease: "power3" });
+    const update3DScroll = () => {
+      // Smooth lerp for scroll physics
+      currentScroll += (targetScroll - currentScroll) * 0.1;
+      const viewH = window.innerHeight;
 
-          const handleMouseMove = (e: MouseEvent) => {
-            const rect = btn.getBoundingClientRect();
-            const x = e.clientX - (rect.left + rect.width / 2);
-            const y = e.clientY - (rect.top + rect.height / 2);
-            // Clamp to 0.25 max displacement factor
-            xTo(x * 0.25);
-            yTo(y * 0.25);
-          };
+      cards3D.forEach((card) => {
+        // Skip mouse-hovered cards so cursor tilt stays responsive
+        if (card.matches(":hover")) return;
 
-          const handleMouseLeave = () => {
-            xTo(0);
-            yTo(0);
-          };
+        const rect = card.getBoundingClientRect();
 
-          btn.addEventListener("mousemove", handleMouseMove);
-          btn.addEventListener("mouseleave", handleMouseLeave);
-        });
-      }
-    });
+        // Only compute for cards currently in or near viewport
+        if (rect.bottom >= -80 && rect.top <= viewH + 80) {
+          const centerY = rect.top + rect.height / 2;
+          const progress = (centerY - viewH / 2) / (viewH / 2); // -1.0 (top) to +1.0 (bottom)
+          const clamped = Math.max(-1.1, Math.min(1.1, progress));
 
-    mm.add("(prefers-reduced-motion: reduce)", () => {
-      // Instantly reveal all elements in final static state
-      gsap.set(["h2", ".project-card-3d", ".hero-container-card"], {
-        opacity: 1,
-        y: 0,
-        clearProps: "all",
+          // 3D Perspective Tilt: tilts toward viewer at bottom, flat in center, tilts away at top
+          const rotateX = clamped * 5.5;
+          const translateZ = (1 - Math.abs(clamped) * 0.45) * 12; // pops closer in 3D space when centered
+
+          card.style.transform = `perspective(1200px) rotateX(${rotateX.toFixed(2)}deg) translateZ(${translateZ.toFixed(1)}px)`;
+        }
       });
-    });
+
+      animationFrameId = requestAnimationFrame(update3DScroll);
+    };
+
+    animationFrameId = requestAnimationFrame(update3DScroll);
+    cleanups.push(() => cancelAnimationFrame(animationFrameId));
+
+    // 3. Smooth Initial 3D Entrance Reveal (Plays once per element, stays permanently visible)
+    if (typeof window !== "undefined" && "IntersectionObserver" in window) {
+      const observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              entry.target.classList.add("is-visible");
+              observer.unobserve(entry.target);
+            }
+          });
+        },
+        { threshold: 0.08, rootMargin: "0px 0px -30px 0px" }
+      );
+
+      const targets = document.querySelectorAll(".reveal-3d");
+      targets.forEach((el) => observer.observe(el));
+
+      cleanups.push(() => {
+        observer.disconnect();
+      });
+    }
 
     return () => {
-      mm.revert();
+      cleanups.forEach((fn) => fn());
     };
   }, []);
 

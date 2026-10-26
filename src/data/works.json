@@ -15,8 +15,8 @@
       { "id": "04", "label": "Lookdev & Shading", "desc": "Physically based materials, groom & Cycles lighting" }
     ],
     "socials": [
+      { "platform": "Instagram", "url": "https://www.instagram.com/sreeketch?psln=bnpkcmZucnplOW9q", "handle": "@sreeketch" },
       { "platform": "ArtStation", "url": "https://artstation.com", "handle": "@sreeraj-3d" },
-      { "platform": "Instagram", "url": "https://instagram.com", "handle": "@sreeraj.3d" },
       { "platform": "YouTube", "url": "https://youtube.com", "handle": "Sreeraj 3D Studio" },
       { "platform": "BlenderArtists", "url": "https://blenderartists.org", "handle": "sreeraj" }
     ]
@@ -65,6 +65,60 @@
     "videoUrl": "https://www.youtube.com/embed/dQw4w9WgXcQ",
     "posterImage": "/placeholders/showreel-poster.jpg"
   },
+  "showreels": [
+    {
+      "id": "reel-01",
+      "title": "2026 Character Animation & 3D Breakdown",
+      "subtitle": "Character Rigging & Cinematic Path Tracing",
+      "duration": "1:48",
+      "year": "2026",
+      "resolution": "4K 60FPS",
+      "engine": "Blender Cycles X",
+      "description": "A high-octane showcase featuring original 3D characters, layered cloth dynamics, facial capture integration, and cinematic Blender Cycles renders.",
+      "videoUrl": "https://www.youtube.com/embed/dQw4w9WgXcQ",
+      "posterImage": "/placeholders/showreel-poster.jpg",
+      "tag": "Main Showreel"
+    },
+    {
+      "id": "reel-02",
+      "title": "Creature Mechanics & Flight Walkcycle",
+      "subtitle": "Quad-Winged Wyrmling Bone Dynamics",
+      "duration": "0:56",
+      "year": "2026",
+      "resolution": "4K 60FPS",
+      "engine": "Auto-Rig Pro & EEVEE",
+      "description": "Full anatomical breakdown of multi-wing IK solvers, secondary muscle jiggle, and tail balance physics across terrain traversal.",
+      "videoUrl": "https://www.youtube.com/embed/dQw4w9WgXcQ",
+      "posterImage": "/placeholders/work-02.jpg",
+      "tag": "Rigging & Motion"
+    },
+    {
+      "id": "reel-03",
+      "title": "Mecha Valkyrie Combat Animation Breakdown",
+      "subtitle": "Keyframe Weight & Secondary Dynamics",
+      "duration": "1:15",
+      "year": "2025",
+      "resolution": "4K 60FPS",
+      "engine": "Blender & Marvelous",
+      "description": "Deep dive into hydraulic recoil pacing, weight shift, anticipation frames, and Marvelous Designer cape cloth simulation.",
+      "videoUrl": "https://www.youtube.com/embed/dQw4w9WgXcQ",
+      "posterImage": "/placeholders/work-04.jpg",
+      "tag": "Combat Keyframing"
+    },
+    {
+      "id": "reel-04",
+      "title": "FACS Facial Rigging & Performance Capture",
+      "subtitle": "52 Apple ARKit Expression Blendshapes",
+      "duration": "1:02",
+      "year": "2025",
+      "resolution": "4K 60FPS",
+      "engine": "Blender 4.2 LTS",
+      "description": "Real-time facial blendshape playback mapping emotional subtleties from micro-smiles to high-intensity dramatic dialogue.",
+      "videoUrl": "https://www.youtube.com/embed/dQw4w9WgXcQ",
+      "posterImage": "/placeholders/work-06.jpg",
+      "tag": "Facial ARKit"
+    }
+  ],
   "process": [
     {
       "step": "01",

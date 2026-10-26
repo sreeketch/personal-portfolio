@@ -74,6 +74,22 @@ html {
   color-scheme: dark;
 }
 
+/* Custom Cursor: hide default OS pointer on fine-pointer desktop devices to prevent duplicate cursor */
+@media (pointer: fine) {
+  html,
+  body,
+  a,
+  button,
+  input,
+  textarea,
+  select,
+  [role="button"],
+  [tabindex],
+  canvas {
+    cursor: none !important;
+  }
+}
+
 body {
   background-color: var(--canvas);
   color: var(--text-secondary);
@@ -126,6 +142,29 @@ h1, h2, h3, h4 {
   border-color: var(--border-hover);
   box-shadow: 0 16px 40px -12px rgba(0, 0, 0, 0.7),
               var(--glow-ember-sm);
+}
+
+/* 3D Depth Scroll Entrance Reveal (Smooth, permanent, zero-flicker) */
+.reveal-3d {
+  opacity: 0;
+  transform: perspective(1200px) translateY(24px) rotateX(3deg);
+  transition: opacity 700ms cubic-bezier(0.16, 1, 0.3, 1),
+              transform 700ms cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: opacity, transform;
+}
+
+.reveal-3d.is-visible {
+  opacity: 1;
+  transform: perspective(1200px) translateY(0) rotateX(0deg);
+}
+
+/* Global 3D Perspective Card Physics for Scroll Animation */
+[data-3d-scroll="card"] {
+  transform-style: preserve-3d;
+  transition: transform 180ms cubic-bezier(0.16, 1, 0.3, 1),
+              box-shadow 250ms ease,
+              border-color 250ms ease;
+  will-change: transform;
 }
 
 /* Primary Pill CTA with verified AAA contrast */

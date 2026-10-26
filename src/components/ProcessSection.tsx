@@ -8,9 +8,7 @@ import {
   Bone,
   Film,
   Sun,
-  ChevronRight,
   ArrowRight,
-  CheckCircle2,
 } from "lucide-react";
 
 export function ProcessSection() {
@@ -22,25 +20,24 @@ export function ProcessSection() {
   const ActiveIcon = stepIcons[activeStepIndex] || Boxes;
 
   return (
-    <section id="process" className="py-24 px-4 sm:px-6 max-w-6xl mx-auto scroll-mt-20">
-      <div className="space-y-12">
+    <section id="process" className="py-16 sm:py-20 px-4 sm:px-6 md:px-8 max-w-6xl mx-auto scroll-mt-20">
+      <div className="space-y-8">
         {/* Header */}
-        <div className="space-y-3">
+        <div className="space-y-2">
           <span className="font-mono text-xs uppercase tracking-widest text-[#FF6B2B]">
             Production Pipeline
           </span>
-          <h2 className="text-3xl sm:text-5xl font-extrabold text-white tracking-tight">
+          <h2 className="text-3xl sm:text-5xl font-extrabold text-white tracking-tight leading-[1.06]">
             From 2D Concept to Final Keyframe
           </h2>
-          <p className="text-sm sm:text-base text-[#94A3B8] max-w-2xl leading-relaxed">
-            Every character follows a rigorous 5-stage production methodology
-            designed to deliver expressive deformation, clean topology, and
-            uncompromising visual impact.
+          <p className="text-xs sm:text-sm text-[#94A3B8] max-w-xl leading-relaxed">
+            A structured 5-stage pipeline engineered to balance anatomical fidelity,
+            clean quad topology, and cinematic deformation.
           </p>
         </div>
 
-        {/* 5-Step Stepper Navigation Bar */}
-        <div className="grid grid-cols-2 sm:grid-cols-5 gap-3">
+        {/* 5-Step Stepper Navigation */}
+        <div className="grid grid-cols-2 sm:grid-cols-5 gap-2.5">
           {process.map((step, idx) => {
             const Icon = stepIcons[idx] || Boxes;
             const isActive = idx === activeStepIndex;
@@ -50,10 +47,10 @@ export function ProcessSection() {
                 key={step.step}
                 type="button"
                 onClick={() => setActiveStepIndex(idx)}
-                className={`p-4 rounded-2xl border text-left transition-all duration-200 flex flex-col justify-between min-h-[110px] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#FF8547] ${
+                className={`p-3.5 rounded-2xl border text-left transition-all duration-200 flex flex-col justify-between min-h-[90px] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#FF8547] ${
                   isActive
-                    ? "bg-[#1C1C22] border-[#FF6B2B] shadow-[0_0_20px_rgba(255,107,43,0.25)]"
-                    : "bg-[#141418] border-[#272730] hover:border-[#383844] hover:bg-[#181820]"
+                    ? "bg-[#FF6B2B]/10 border-[#FF6B2B] shadow-[0_0_20px_rgba(255,107,43,0.2)]"
+                    : "bg-white/[0.02] border-white/[0.08] hover:border-white/[0.18]"
                 }`}
                 aria-pressed={isActive}
               >
@@ -63,7 +60,7 @@ export function ProcessSection() {
                       isActive ? "text-[#FF6B2B]" : "text-[#768597]"
                     }`}
                   >
-                    #{step.step}
+                    0{step.step}
                   </span>
                   <Icon
                     className={`w-4 h-4 ${
@@ -71,7 +68,7 @@ export function ProcessSection() {
                     }`}
                   />
                 </div>
-                <div className="mt-4">
+                <div className="mt-3">
                   <p
                     className={`font-display font-bold text-xs sm:text-sm line-clamp-1 ${
                       isActive ? "text-white" : "text-[#94A3B8]"
@@ -85,20 +82,14 @@ export function ProcessSection() {
           })}
         </div>
 
-        {/* Active Stage Detailed Breakdown Card */}
-        <div className="p-8 sm:p-12 rounded-3xl bg-gradient-to-b from-[#141418] via-[#0E0E12] to-[#08080A] border border-[#272730] shadow-2xl relative overflow-hidden">
-          {/* Subtle Ambient Radial Flare */}
-          <div className="absolute top-0 right-0 w-96 h-96 bg-[#FF6B2B]/10 rounded-full blur-3xl pointer-events-none" />
-
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center relative z-10">
-            {/* Stage Description & Methodology */}
-            <div className="lg:col-span-7 space-y-6">
-              <div className="space-y-2">
-                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#08080A] border border-[#272730] text-xs font-mono text-[#FF6B2B]">
-                  <span>Stage #{activeStep.step}</span>
-                  <span>•</span>
-                  <span>{activeStep.shortDesc}</span>
-                </div>
+        {/* Active Stage Detail */}
+        <div data-3d-scroll="card" className="p-8 sm:p-10 rounded-3xl bg-white/[0.02] border border-white/[0.08] relative overflow-hidden reveal-3d">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+            <div className="lg:col-span-8 space-y-5">
+              <div className="space-y-1">
+                <span className="font-mono text-xs text-[#FF6B2B] uppercase tracking-wider block">
+                  Stage 0{activeStep.step} • {activeStep.shortDesc}
+                </span>
                 <h3 className="text-2xl sm:text-3xl font-bold text-white">
                   {activeStep.name}
                 </h3>
@@ -108,16 +99,15 @@ export function ProcessSection() {
                 {activeStep.details}
               </p>
 
-              {/* Tools Employed in this Stage */}
-              <div className="pt-2">
-                <span className="font-mono text-xs text-[#768597] block mb-2 uppercase tracking-wider">
-                  Software & Addons Employed:
+              <div>
+                <span className="font-mono text-[11px] text-[#768597] block mb-2 uppercase tracking-wider">
+                  Software & Tools:
                 </span>
                 <div className="flex flex-wrap gap-2">
                   {activeStep.tools.map((tool) => (
                     <span
                       key={tool}
-                      className="text-xs font-mono px-3 py-1 rounded-lg bg-[#1C1C22] text-white border border-[#272730] shadow-sm"
+                      className="text-xs font-mono px-3 py-1 rounded-full bg-[#08080A] text-white border border-white/[0.08]"
                     >
                       {tool}
                     </span>
@@ -125,15 +115,15 @@ export function ProcessSection() {
                 </div>
               </div>
 
-              {/* Progress Stepper Controls */}
-              <div className="flex items-center gap-3 pt-4 border-t border-[#272730]/60">
+              {/* Prev / Next Stage Buttons */}
+              <div className="flex items-center gap-3 pt-4 border-t border-white/[0.06]">
                 <button
                   type="button"
                   disabled={activeStepIndex === 0}
                   onClick={() => setActiveStepIndex((prev) => Math.max(0, prev - 1))}
-                  className="px-4 py-2 rounded-full bg-[#1C1C22] disabled:opacity-40 text-xs font-medium text-white border border-[#272730] hover:border-[#FF6B2B] transition-colors"
+                  className="px-4 py-1.5 rounded-full bg-white/[0.04] disabled:opacity-30 text-xs text-white border border-white/[0.08] hover:border-white/[0.2] transition-colors"
                 >
-                  Previous Stage
+                  Previous
                 </button>
                 <button
                   type="button"
@@ -143,7 +133,7 @@ export function ProcessSection() {
                       Math.min(process.length - 1, prev + 1)
                     )
                   }
-                  className="px-4 py-2 rounded-full bg-[#FF6B2B] disabled:opacity-40 text-xs font-semibold text-[#08080A] flex items-center gap-1.5 hover:bg-[#FF8547] transition-colors"
+                  className="px-4 py-1.5 rounded-full bg-[#FF6B2B] disabled:opacity-30 text-xs font-semibold text-[#08080A] flex items-center gap-1 hover:bg-[#FF8547] transition-colors"
                 >
                   <span>Next Stage</span>
                   <ArrowRight className="w-3.5 h-3.5" />
@@ -151,16 +141,11 @@ export function ProcessSection() {
               </div>
             </div>
 
-            {/* Stage Visual Icon / Technical Emblem */}
-            <div className="lg:col-span-5 flex justify-center">
-              <div className="relative w-48 h-48 sm:w-60 sm:h-60 rounded-3xl bg-[#08080A] border-2 border-[#272730] flex flex-col items-center justify-center p-8 shadow-inner group">
-                <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(255,107,43,0.18)_0%,transparent_70%)]" />
-                <ActiveIcon className="w-20 h-20 text-[#FF6B2B] mb-4 group-hover:scale-110 transition-transform duration-300 relative z-10" />
-                <span className="font-mono text-xs uppercase tracking-widest text-[#768597] relative z-10">
-                  Phase {activeStep.step} Deliverable
-                </span>
-                <span className="font-display font-bold text-sm text-white mt-1 relative z-10 text-center">
-                  Production Validated
+            <div className="lg:col-span-4 flex justify-center">
+              <div className="w-40 h-40 rounded-3xl bg-[#08080A] border border-white/[0.08] flex flex-col items-center justify-center p-6 text-center">
+                <ActiveIcon className="w-14 h-14 text-[#FF6B2B] mb-2" />
+                <span className="font-mono text-[11px] uppercase tracking-wider text-[#768597]">
+                  Phase 0{activeStep.step}
                 </span>
               </div>
             </div>

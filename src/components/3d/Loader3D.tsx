@@ -1,46 +1,48 @@
 "use client";
 
-import React from "react";
-import { Html, useProgress } from "@react-three/drei";
+import React, { useRef } from "react";
+import { useFrame } from "@react-three/fiber";
+import * as THREE from "three";
 
 export function Loader3D() {
-  const { progress } = useProgress();
+  const groupRef = useRef<THREE.Group>(null);
+  const ringRef = useRef<THREE.Mesh>(null);
+
+  useFrame((state, delta) => {
+    const t = state.clock.getElapsedTime();
+    if (groupRef.current) {
+      groupRef.current.rotation.y += delta * 1.5;
+      groupRef.current.position.y = Math.sin(t * 2) * 0.05;
+    }
+    if (ringRef.current) {
+      ringRef.current.rotation.z -= delta * 1.8;
+    }
+  });
 
   return (
-    <Html center>
-      <div
-        role="status"
-        aria-live="polite"
-        className="flex flex-col items-center gap-3 p-4 rounded-2xl bg-[#0E0E12]/90 border border-[#272730] backdrop-blur-xl shadow-2xl min-w-[180px]"
-      >
-        {/* Ember Radial Ring */}
-        <div className="relative w-10 h-10 flex items-center justify-center">
-          <svg className="w-full h-full -rotate-90" viewBox="0 0 36 36">
-            <path
-              className="text-[#22222A]"
-              strokeWidth="3.5"
-              stroke="currentColor"
-              fill="none"
-              d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
-            />
-            <path
-              className="text-[#FF6B2B]"
-              strokeDasharray={`${progress}, 100`}
-              strokeWidth="3.5"
-              strokeLinecap="round"
-              stroke="currentColor"
-              fill="none"
-              d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
-            />
-          </svg>
-          <span className="absolute font-mono text-[10px] text-white font-semibold">
-            {Math.round(progress)}%
-          </span>
-        </div>
-        <p className="font-mono text-[11px] text-[#94A3B8] tracking-wider uppercase">
-          Loading 3D Model...
-        </p>
-      </div>
-    </Html>
+    <group ref={groupRef} position={[0, 0, 0]}>
+      {/* Outer Rotating Wireframe Gem */}
+      <mesh>
+        <octahedronGeometry args={[0.45, 0]} />
+        <meshStandardMaterial
+          color="#FF6B2B"
+          wireframe
+          emissive="#FF5500"
+          emissiveIntensity={1.2}
+        />
+      </mesh>
+
+      {/* Inner Glowing Core */}
+      <mesh>
+        <sphereGeometry args={[0.18, 16, 16]} />
+        <meshBasicMaterial color="#FF8547" />
+      </mesh>
+
+      {/* Orbiting Halo Ring */}
+      <mesh ref={ringRef} rotation={[Math.PI / 3, 0, 0]}>
+        <torusGeometry args={[0.7, 0.015, 16, 48]} />
+        <meshBasicMaterial color="#FF5500" transparent opacity={0.6} />
+      </mesh>
+    </group>
   );
 }

@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { ArrowUp, Sparkles } from "lucide-react";
+import { ArrowUp } from "lucide-react";
 import portfolioData from "@/data/works.json";
 
 export function Footer() {
@@ -10,96 +10,77 @@ export function Footer() {
   };
 
   return (
-    <footer className="border-t border-[#272730] bg-[#0A0A0E] text-[#94A3B8] pt-16 pb-12 mt-24">
-      <div className="max-w-6xl mx-auto px-4 sm:px-6">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-10 pb-12 border-b border-[#272730]">
-          {/* Brand & Mission */}
-          <div className="md:col-span-2 space-y-4">
-            <div className="flex items-center gap-2.5">
-              <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-[#E05316] to-[#FF8547] flex items-center justify-center text-[#08080A]">
-                <Sparkles className="w-4 h-4 fill-current" />
-              </div>
-              <span className="font-display font-bold text-xl text-white tracking-tight">
+    <footer className="border-t border-white/[0.08] bg-[#070709] text-[#94A3B8] pt-12 pb-10 mt-14 relative z-10">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 md:px-8">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-10 pb-12 border-b border-white/[0.06]">
+          {/* Brand */}
+          <div className="md:col-span-2 space-y-3">
+            <div className="flex items-center gap-2">
+              <span className="w-2 h-2 rounded-full bg-[#FF6B2B]" />
+              <span className="font-display font-bold text-lg text-white">
                 SREERAJ 3D
               </span>
             </div>
-            <p className="text-sm text-[#94A3B8] max-w-sm leading-relaxed">
-              Freelance 3D artist, character designer, and animator sculpting
-              expressive characters and cinematic worlds in Blender.
+            <p className="text-xs text-[#94A3B8] max-w-sm leading-relaxed">
+              Freelance character designer and 3D animator sculpting expressive
+              digital clay and cinematic rigging in Blender.
             </p>
-            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#141418] border border-[#272730] text-xs text-[#E2E8F0]">
-              <span className="w-2 h-2 rounded-full bg-[#22C55E] animate-pulse" />
-              <span>Available for Select Freelance Commissions</span>
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/[0.03] border border-white/[0.06] text-[11px] text-[#E2E8F0]">
+              <span className="w-1.5 h-1.5 rounded-full bg-[#22C55E]" />
+              <span>Available for 2026 Commissions</span>
             </div>
           </div>
 
-          {/* Navigation */}
-          <div>
-            <h4 className="font-mono text-xs uppercase tracking-wider text-white mb-4">
+          {/* Links */}
+          <div className="space-y-3">
+            <span className="font-mono text-[11px] uppercase tracking-wider text-white">
               Navigation
-            </h4>
-            <ul className="space-y-2.5 text-sm">
+            </span>
+            <ul className="space-y-2 text-xs">
               <li>
-                <a
-                  href="#works"
-                  className="hover:text-[#FF6B2B] transition-colors"
-                >
+                <a href="#works" className="hover:text-[#FF6B2B] transition-colors">
                   Selected Works
                 </a>
               </li>
               <li>
-                <a
-                  href="#about"
-                  className="hover:text-[#FF6B2B] transition-colors"
-                >
+                <a href="#about" className="hover:text-[#FF6B2B] transition-colors">
                   About & Skills
                 </a>
               </li>
               <li>
-                <a
-                  href="#showreel"
-                  className="hover:text-[#FF6B2B] transition-colors"
-                >
-                  Animation Showreel
+                <a href="#showreel" className="hover:text-[#FF6B2B] transition-colors">
+                  Animation Reel
                 </a>
               </li>
               <li>
-                <a
-                  href="#process"
-                  className="hover:text-[#FF6B2B] transition-colors"
-                >
-                  5-Step Process
+                <a href="#process" className="hover:text-[#FF6B2B] transition-colors">
+                  5-Step Pipeline
                 </a>
               </li>
               <li>
-                <a
-                  href="#contact"
-                  className="hover:text-[#FF6B2B] transition-colors"
-                >
-                  Get in Touch
+                <a href="#contact" className="hover:text-[#FF6B2B] transition-colors">
+                  Contact
                 </a>
               </li>
             </ul>
           </div>
 
-          {/* Social Channels */}
-          <div>
-            <h4 className="font-mono text-xs uppercase tracking-wider text-white mb-4">
-              Studio Channels
-            </h4>
-            <ul className="space-y-2.5 text-sm">
-              {portfolioData.profile.socials.map((social) => (
-                <li key={social.platform}>
+          {/* Social */}
+          <div className="space-y-3">
+            <span className="font-mono text-[11px] uppercase tracking-wider text-white">
+              Portals
+            </span>
+            <ul className="space-y-2 text-xs font-mono">
+              {portfolioData.profile.socials.map((s) => (
+                <li key={s.platform}>
                   <a
-                    href={social.url}
+                    href={s.url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="hover:text-[#FF6B2B] transition-colors flex items-center justify-between group"
+                    className="hover:text-[#FF6B2B] transition-colors flex items-center justify-between"
                   >
-                    <span>{social.platform}</span>
-                    <span className="font-mono text-xs text-[#768597] group-hover:text-white transition-colors">
-                      {social.handle}
-                    </span>
+                    <span>{s.platform}</span>
+                    <span className="text-[#768597]">{s.handle}</span>
                   </a>
                 </li>
               ))}
@@ -107,20 +88,15 @@ export function Footer() {
           </div>
         </div>
 
-        {/* Bottom Bar */}
-        <div className="pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-[#768597]">
-          <p>
-            © {new Date().getFullYear()} Sreeraj. All rights reserved. 3D assets &
-            renders belong to respective projects.
-          </p>
-          <div className="flex items-center gap-6">
-            <span className="font-mono text-[11px]">
-              Engineered with Next.js, R3F & Tailwind CSS
-            </span>
+        {/* Bottom */}
+        <div className="pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-[11px] text-[#768597]">
+          <p>© {new Date().getFullYear()} Sreeraj. All rights reserved.</p>
+          <div className="flex items-center gap-4">
+            <span className="font-mono">Next.js • Three.js • Tailwind</span>
             <button
               onClick={scrollToTop}
-              className="w-8 h-8 rounded-full bg-[#141418] border border-[#272730] flex items-center justify-center text-[#E2E8F0] hover:text-white hover:border-[#FF6B2B] hover:shadow-[0_0_12px_rgba(255,107,43,0.3)] transition-all"
-              aria-label="Back to top of page"
+              className="w-7 h-7 rounded-full bg-white/[0.04] border border-white/[0.08] flex items-center justify-center text-white hover:border-[#FF6B2B] transition-colors"
+              aria-label="Back to top"
             >
               <ArrowUp className="w-3.5 h-3.5" />
             </button>

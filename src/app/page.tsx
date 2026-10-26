@@ -8,10 +8,14 @@ import { ProcessSection } from "@/components/ProcessSection";
 import { ContactSection } from "@/components/ContactSection";
 import { MotionProvider } from "@/components/MotionProvider";
 import { AntigravityBackground } from "@/components/AntigravityBackground";
+import { CustomCursor } from "@/components/CustomCursor";
 
 export default function Home() {
   return (
     <MotionProvider>
+      {/* Bespoke 3D Studio Cursor */}
+      <CustomCursor />
+
       {/* Antigravity Interactive Background & Cursor Physics */}
       <AntigravityBackground />
 

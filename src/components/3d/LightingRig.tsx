@@ -5,14 +5,14 @@ import React from "react";
 export function LightingRig() {
   return (
     <>
-      {/* Ambient Fill: Deep neutral atmosphere */}
-      <ambientLight intensity={0.65} color="#181822" />
+      {/* Ambient Fill: Balanced studio tone */}
+      <ambientLight intensity={1.1} color="#252532" />
 
       {/* Warm Key Light: Front-right 45 degrees */}
       <directionalLight
         position={[4, 5, 4]}
-        intensity={2.8}
-        color="#FFF4E0"
+        intensity={3.2}
+        color="#FFF8F0"
         castShadow
         shadow-mapSize={[1024, 1024]}
         shadow-bias={-0.0001}
@@ -20,26 +20,30 @@ export function LightingRig() {
 
       {/* Cool Secondary Fill: Front-left */}
       <directionalLight
-        position={[-4, 2, 2]}
-        intensity={0.9}
-        color="#88A0C0"
+        position={[-4, 2, 3]}
+        intensity={1.4}
+        color="#8FA8CC"
       />
 
-      {/* Signature Molten Ember Rim Light (Behind subject, pointing toward camera) */}
+      {/* Soft Front Fill: Illuminates facial details and visor reflections */}
+      <directionalLight
+        position={[0, 0.5, 4.5]}
+        intensity={0.9}
+        color="#FFFFFF"
+      />
+
+      {/* Signature Molten Ember Rim Light (Behind subject, highlighting helmet contour) */}
       <spotLight
-        position={[0, 3, -4.5]}
+        position={[0, 3.5, -4]}
         target-position={[0, 0, 0]}
-        intensity={9.5}
+        intensity={8.5}
         color="#FF5500"
-        angle={0.9}
+        angle={1.0}
         penumbra={0.8}
       />
 
-      {/* Secondary Ember Ground Rim / Volumetric bounce */}
-      <pointLight position={[0, -2.5, -2]} intensity={4.0} color="#FF7A1A" />
-
-      {/* Subtle Crown Specular Glint */}
-      <pointLight position={[0, 4, 1]} intensity={1.5} color="#FFE0A0" />
+      {/* Under-glow / Volumetric bounce from bottom */}
+      <pointLight position={[0, -2, 1]} intensity={2.5} color="#FF7A1A" />
     </>
   );
 }

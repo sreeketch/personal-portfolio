@@ -4,7 +4,7 @@ import React, { useState } from "react";
 import portfolioData from "@/data/works.json";
 import { ProjectItem } from "@/types/portfolio";
 import { ProjectModal } from "./ProjectModal";
-import { ArrowUpRight, Box, Film } from "lucide-react";
+import { ArrowUpRight, Box, Film, Sparkles, Layers } from "lucide-react";
 
 export function WorksGrid() {
   const [activeCategory, setActiveCategory] = useState<string>("All");
@@ -17,7 +17,6 @@ export function WorksGrid() {
       ? allProjects
       : allProjects.filter((p) => p.category === activeCategory);
 
-  // Navigate between projects in modal
   const currentIndex = selectedProject
     ? filteredProjects.findIndex((p) => p.id === selectedProject.id)
     : -1;
@@ -32,7 +31,7 @@ export function WorksGrid() {
     if (hasNext) setSelectedProject(filteredProjects[currentIndex + 1]);
   };
 
-  // Card mouse movement for 3D perspective tilt & dynamic pointer spotlight
+  // 3D Perspective Tilt with Specular Lighting
   const handlePointerMove = (e: React.PointerEvent<HTMLDivElement>) => {
     const card = e.currentTarget;
     const rect = card.getBoundingClientRect();
@@ -41,87 +40,98 @@ export function WorksGrid() {
 
     const centerX = rect.width / 2;
     const centerY = rect.height / 2;
-    const rotateX = ((y - centerY) / centerY) * -5;
-    const rotateY = ((x - centerX) / centerX) * 5;
+    const rotateX = ((y - centerY) / centerY) * -6;
+    const rotateY = ((x - centerX) / centerX) * 6;
 
-    card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.015, 1.015, 1.015)`;
+    card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateY(-4px) scale3d(1.02, 1.02, 1.02)`;
     card.style.setProperty("--mouse-x", `${x}px`);
     card.style.setProperty("--mouse-y", `${y}px`);
   };
 
   const handlePointerLeave = (e: React.PointerEvent<HTMLDivElement>) => {
     const card = e.currentTarget;
-    card.style.transform = "perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)";
+    card.style.transform = "perspective(1000px) rotateX(0deg) rotateY(0deg) translateY(0px) scale3d(1, 1, 1)";
   };
 
   return (
-    <section id="works" className="py-24 px-4 sm:px-6 max-w-6xl mx-auto scroll-mt-20">
-      {/* Asymmetric Header (Reference Design Alignment) */}
-      <div className="grid grid-cols-1 md:grid-cols-12 gap-8 items-end pb-12 border-b border-[#272730]">
-        <div className="md:col-span-7 space-y-3">
+    <section id="works" className="py-16 sm:py-20 px-4 sm:px-6 md:px-8 max-w-6xl mx-auto scroll-mt-20">
+      {/* Clean Minimal Header with Integrated Filters */}
+      <div className="flex flex-col md:flex-row md:items-end justify-between gap-5 pb-6 border-b border-white/[0.08]">
+        <div className="space-y-1.5 max-w-lg">
           <span className="font-mono text-xs uppercase tracking-widest text-[#FF6B2B]">
-            Behind the Designs
+            Portfolio Showcase
           </span>
-          <h2 className="text-3xl sm:text-5xl font-extrabold text-white tracking-tight leading-[1.08]">
-            Sculpting Stories That <br />
+          <h2 className="text-3xl sm:text-5xl font-extrabold text-white tracking-tight leading-[1.06]">
+            Selected 3D Works <br />
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-white via-[#E2E8F0] to-[#FF8547]">
-              Resonate Beyond The Screen
+              & Character Designs
             </span>
           </h2>
-        </div>
-        <div className="md:col-span-5 space-y-4">
-          <p className="text-sm text-[#94A3B8] leading-relaxed">
-            From initial topological sculpt to final keyframe animation, every
-            character is engineered with narrative weight, expressive deformation,
-            and cinematic lighting.
+          <p className="text-xs sm:text-sm text-[#94A3B8] leading-relaxed pt-1">
+            Interactive character sculpts, rigging studies, and Blender animations.
+            Hover for 3D depth, click to inspect model topology.
           </p>
-          <div className="flex items-center gap-4">
-            <span className="text-xs text-white font-medium">
-              Ready to collaborate on a character or 3D reel?
-            </span>
-            <a href="#contact" className="btn-primary-ember text-xs py-2 px-4">
-              <span>Get in touch</span>
-              <ArrowUpRight className="w-3.5 h-3.5" />
-            </a>
-          </div>
+        </div>
+
+        {/* Minimal Category Filter Tabs Aligned in Header */}
+        <div className="flex flex-wrap items-center gap-1.5">
+          {categories.map((cat) => {
+            const isActive = cat === activeCategory;
+            const count =
+              cat === "All"
+                ? allProjects.length
+                : allProjects.filter((p) => p.category === cat).length;
+
+            return (
+              <button
+                key={cat}
+                onClick={() => setActiveCategory(cat)}
+                className={`px-3.5 py-1.5 rounded-full text-xs font-mono transition-all duration-200 flex items-center gap-1.5 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#FF8547] ${
+                  isActive
+                    ? "bg-[#FF6B2B] text-[#08080A] font-semibold shadow-[0_0_16px_rgba(255,107,43,0.3)]"
+                    : "bg-white/[0.03] text-[#94A3B8] hover:text-white border border-white/[0.06] hover:border-white/[0.15]"
+                }`}
+              >
+                <span>{cat}</span>
+                <span
+                  className={`text-[10px] px-1.5 py-0.2 rounded-full ${
+                    isActive ? "bg-[#08080A]/20 text-[#08080A]" : "text-[#768597]"
+                  }`}
+                >
+                  {count}
+                </span>
+              </button>
+            );
+          })}
         </div>
       </div>
 
-      {/* Filterable Category Tabs */}
-      <div className="flex flex-wrap items-center gap-2 pt-8 pb-4">
-        {categories.map((cat) => {
-          const isActive = cat === activeCategory;
-          return (
-            <button
-              key={cat}
-              onClick={() => setActiveCategory(cat)}
-              className={`px-4 py-2 rounded-full text-xs font-mono transition-all duration-150 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#FF8547] ${
-                isActive
-                  ? "bg-[#FF6B2B] text-[#08080A] font-bold shadow-[0_0_16px_rgba(255,107,43,0.35)]"
-                  : "bg-[#141418] text-[#94A3B8] hover:text-white border border-[#272730]"
-              }`}
-            >
-              {cat}
-            </button>
-          );
-        })}
-      </div>
-
-      {/* 3-Column Showcase Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-6">
+      {/* 3D Showcase Grid */}
+      <div className="mt-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {filteredProjects.map((project) => (
           <div
             key={project.id}
+            data-3d-scroll="card"
             onClick={() => setSelectedProject(project)}
             onPointerMove={handlePointerMove}
             onPointerLeave={handlePointerLeave}
-            className="project-card-3d group cursor-pointer"
+            className="group cursor-pointer relative rounded-3xl bg-gradient-to-b from-white/[0.04] to-white/[0.01] border border-white/[0.08] hover:border-[#FF6B2B]/50 transition-all duration-300 overflow-hidden shadow-xl reveal-3d"
+            style={{ willChange: "transform" }}
           >
-            {/* 4:5 Vertical Aspect Ratio Card Frame */}
-            <div className="aspect-[4/5] bg-gradient-to-b from-[#181822] via-[#121218] to-[#0A0A0E] relative overflow-hidden flex flex-col justify-between p-6 select-none">
-              {/* Card Top Category & Year */}
-              <div className="flex items-center justify-between z-10">
-                <span className="font-mono text-xs px-2.5 py-1 rounded-full bg-[#08080A]/85 border border-[#272730] text-[#FF8547]">
+            {/* Interactive Dynamic Specular Glare (Moves with Cursor on Card) */}
+            <div
+              className="absolute inset-0 pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-10"
+              style={{
+                background:
+                  "radial-gradient(400px circle at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(255, 107, 43, 0.15), transparent 60%)",
+              }}
+            />
+
+            {/* Card Interior */}
+            <div className="aspect-[4/5] p-6 flex flex-col justify-between relative select-none">
+              {/* Top Tags */}
+              <div className="flex items-center justify-between z-20">
+                <span className="font-mono text-[11px] px-2.5 py-1 rounded-full bg-[#08080A]/90 border border-white/[0.08] text-[#FF8547]">
                   {project.category}
                 </span>
                 <span className="font-mono text-xs text-[#768597]">
@@ -129,27 +139,29 @@ export function WorksGrid() {
                 </span>
               </div>
 
-              {/* Center Artistic Icon / Thumbnail Presentation */}
-              <div className="my-auto text-center space-y-3 opacity-80 group-hover:opacity-100 group-hover:scale-105 transition-all duration-300">
-                <div className="w-16 h-16 rounded-2xl bg-[#0E0E12] border border-[#272730] text-[#FF6B2B] flex items-center justify-center mx-auto shadow-[0_0_24px_rgba(255,107,43,0.25)] group-hover:border-[#FF6B2B]/60 transition-colors">
+              {/* 3D Visual Center Piece */}
+              <div className="my-auto text-center space-y-3 z-20 transition-transform duration-300 group-hover:scale-105">
+                <div className="w-20 h-20 rounded-2xl bg-[#08080A]/90 border border-white/[0.08] group-hover:border-[#FF6B2B]/60 text-[#FF6B2B] flex items-center justify-center mx-auto shadow-[0_0_30px_rgba(255,107,43,0.2)] group-hover:shadow-[0_0_40px_rgba(255,107,43,0.4)] transition-all">
                   {project.category === "3D Animation" ? (
-                    <Film className="w-7 h-7" />
+                    <Film className="w-8 h-8" />
                   ) : (
-                    <Box className="w-7 h-7" />
+                    <Box className="w-8 h-8" />
                   )}
                 </div>
-                <div>
-                  <p className="font-mono text-xs text-white/90 font-medium">
+
+                <div className="space-y-1">
+                  <span className="font-mono text-xs text-white/90 font-medium block">
                     {project.polycount}
-                  </p>
-                  <p className="font-mono text-[10px] text-[#768597] uppercase">
-                    Click to Inspect 3D Model
-                  </p>
+                  </span>
+                  <span className="inline-flex items-center gap-1 text-[11px] font-mono text-[#FF8547] group-hover:underline">
+                    <span>Inspect 3D Asset</span>
+                    <ArrowUpRight className="w-3 h-3" />
+                  </span>
                 </div>
               </div>
 
-              {/* Card Bottom Metadata */}
-              <div className="z-10 space-y-2">
+              {/* Bottom Project Metadata */}
+              <div className="z-20 space-y-2">
                 <h3 className="font-display font-bold text-lg text-white group-hover:text-[#FF8547] transition-colors leading-tight">
                   {project.title}
                 </h3>
@@ -161,7 +173,7 @@ export function WorksGrid() {
                   {project.tools.slice(0, 3).map((tool) => (
                     <span
                       key={tool}
-                      className="text-[10px] font-mono px-2 py-0.5 rounded bg-[#08080A]/90 text-[#E2E8F0] border border-[#272730]/60"
+                      className="text-[10px] font-mono px-2 py-0.5 rounded bg-[#08080A]/80 text-[#E2E8F0] border border-white/[0.06]"
                     >
                       {tool}
                     </span>
@@ -173,7 +185,7 @@ export function WorksGrid() {
         ))}
       </div>
 
-      {/* Universal Lightbox Modal Dialog */}
+      {/* Universal 3D Lightbox Modal */}
       <ProjectModal
         project={selectedProject}
         onClose={() => setSelectedProject(null)}

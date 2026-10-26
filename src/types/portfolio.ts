@@ -41,6 +41,20 @@ export interface AboutData {
   pipelineTools: PipelineTool[];
 }
 
+export interface ShowreelItem {
+  id: string;
+  title: string;
+  subtitle?: string;
+  duration: string;
+  year: string;
+  resolution?: string;
+  engine?: string;
+  description: string;
+  videoUrl: string;
+  posterImage?: string;
+  tag?: string;
+}
+
 export interface ShowreelData {
   title: string;
   duration: string;
@@ -48,6 +62,7 @@ export interface ShowreelData {
   description: string;
   videoUrl: string;
   posterImage: string;
+  items?: ShowreelItem[];
 }
 
 export interface ProcessStep {
@@ -78,6 +93,7 @@ export interface PortfolioData {
   profile: ProfileData;
   about: AboutData;
   showreel: ShowreelData;
+  showreels?: ShowreelItem[];
   process: ProcessStep[];
   categories: string[];
   projects: ProjectItem[];
