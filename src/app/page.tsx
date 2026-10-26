@@ -7,13 +7,17 @@ import { ShowreelSection } from "@/components/ShowreelSection";
 import { ProcessSection } from "@/components/ProcessSection";
 import { ContactSection } from "@/components/ContactSection";
 import { MotionProvider } from "@/components/MotionProvider";
+import { AntigravityBackground } from "@/components/AntigravityBackground";
 
 export default function Home() {
   return (
     <MotionProvider>
+      {/* Antigravity Interactive Background & Cursor Physics */}
+      <AntigravityBackground />
+
       <Navbar />
 
-      <main id="main-content" className="flex-1">
+      <main id="main-content" className="flex-1 relative z-10">
         {/* Section 1: Hero with 3D Turntable, Headlines & 4-Pillar Strip */}
         <HeroSection />
 
