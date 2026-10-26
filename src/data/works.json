@@ -62,7 +62,7 @@
     "duration": "1:48",
     "year": "2026",
     "description": "A high-octane showcase featuring original 3D characters, cloth simulations, facial capture integration, and cinematic Blender Cycles renders.",
-    "videoUrl": "https://www.youtube.com/embed/dQw4w9WgXcQ",
+    "videoUrl": "https://www.youtube.com/embed/_cMxraX_5RE",
     "posterImage": "/placeholders/showreel-poster.jpg"
   },
   "showreels": [
@@ -75,7 +75,7 @@
       "resolution": "4K 60FPS",
       "engine": "Blender Cycles X",
       "description": "A high-octane showcase featuring original 3D characters, layered cloth dynamics, facial capture integration, and cinematic Blender Cycles renders.",
-      "videoUrl": "https://www.youtube.com/embed/dQw4w9WgXcQ",
+      "videoUrl": "https://www.youtube.com/embed/_cMxraX_5RE",
       "posterImage": "/placeholders/showreel-poster.jpg",
       "tag": "Main Showreel"
     },
@@ -88,7 +88,7 @@
       "resolution": "4K 60FPS",
       "engine": "Auto-Rig Pro & EEVEE",
       "description": "Full anatomical breakdown of multi-wing IK solvers, secondary muscle jiggle, and tail balance physics across terrain traversal.",
-      "videoUrl": "https://www.youtube.com/embed/dQw4w9WgXcQ",
+      "videoUrl": "https://www.youtube.com/embed/mN0zPOpADL4",
       "posterImage": "/placeholders/work-02.jpg",
       "tag": "Rigging & Motion"
     },
@@ -101,7 +101,7 @@
       "resolution": "4K 60FPS",
       "engine": "Blender & Marvelous",
       "description": "Deep dive into hydraulic recoil pacing, weight shift, anticipation frames, and Marvelous Designer cape cloth simulation.",
-      "videoUrl": "https://www.youtube.com/embed/dQw4w9WgXcQ",
+      "videoUrl": "https://www.youtube.com/embed/WhWc3b3KhnY",
       "posterImage": "/placeholders/work-04.jpg",
       "tag": "Combat Keyframing"
     },
@@ -114,7 +114,7 @@
       "resolution": "4K 60FPS",
       "engine": "Blender 4.2 LTS",
       "description": "Real-time facial blendshape playback mapping emotional subtleties from micro-smiles to high-intensity dramatic dialogue.",
-      "videoUrl": "https://www.youtube.com/embed/dQw4w9WgXcQ",
+      "videoUrl": "https://www.youtube.com/embed/sk_3j3712vI",
       "posterImage": "/placeholders/work-06.jpg",
       "tag": "Facial ARKit"
     }
@@ -186,7 +186,7 @@
       "description": "A quad-winged draconic creature engineered from skeleton to final flight animation. Built with an intricate multi-wing IK solver, automated tail physics, and layered breathing secondary motion.",
       "thumbnail": "/placeholders/work-02.jpg",
       "modelUrl": null,
-      "videoUrl": "https://www.youtube.com/embed/dQw4w9WgXcQ",
+      "videoUrl": "https://www.youtube.com/embed/WhWc3b3KhnY",
       "featured": true,
       "year": "2026",
       "polycount": "72,500 Quads",
@@ -226,7 +226,7 @@
       "description": "High-impact combat readiness animation for a stylized battle mech. Explores natural balance shifting, hydraulic piston recoil, and dynamic cape physics simulated in Marvelous Designer.",
       "thumbnail": "/placeholders/work-04.jpg",
       "modelUrl": null,
-      "videoUrl": "https://www.youtube.com/embed/dQw4w9WgXcQ",
+      "videoUrl": "https://www.youtube.com/embed/_cMxraX_5RE",
       "featured": false,
       "year": "2025",
       "polycount": "38,400 Quads",

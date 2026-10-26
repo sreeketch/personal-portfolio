@@ -22,9 +22,14 @@ export function ShowreelSection() {
     setCurrentIndex((prev) => (prev === showreels.length - 1 ? 0 : prev + 1));
   }, [showreels.length]);
 
-  // Keyboard navigation when focusing the reel section
+  // Keyboard navigation when focusing the reel section (guarded against inputs & modals)
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
+      const target = e.target as HTMLElement | null;
+      const isInput = target && (target.tagName === "INPUT" || target.tagName === "TEXTAREA" || target.isContentEditable);
+      const isModalOpen = !!document.querySelector("[role='dialog']");
+      if (isInput || isModalOpen) return;
+
       if (e.key === "ArrowLeft") {
         handlePrev();
       } else if (e.key === "ArrowRight") {

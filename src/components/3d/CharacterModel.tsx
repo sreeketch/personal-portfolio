@@ -2,7 +2,7 @@
 
 import React, { useRef, useMemo, useEffect } from "react";
 import { useFrame } from "@react-three/fiber";
-import { useGLTF, useAnimations, Center } from "@react-three/drei";
+import { useGLTF, Center } from "@react-three/drei";
 import * as THREE from "three";
 
 interface CharacterModelProps {
@@ -21,15 +21,12 @@ function getAssetPath(path: string) {
   return path;
 }
 
-const MODEL_PATH = "/models/boy-24-bust.glb";
-const DRACO_PATH = "/draco/";
+const MODEL_PATH = "/models/pixellabs-model.glb";
 
-function BoyModel() {
+function ModelViewer() {
   const modelUrl = getAssetPath(MODEL_PATH);
-  const dracoUrl = getAssetPath(DRACO_PATH);
-  const { scene, animations } = useGLTF(modelUrl, dracoUrl);
+  const { scene } = useGLTF(modelUrl);
   const groupRef = useRef<THREE.Group>(null);
-  const { actions } = useAnimations(animations, groupRef);
 
   useEffect(() => {
     const box = new THREE.Box3().setFromObject(scene);
@@ -37,28 +34,12 @@ function BoyModel() {
     const center = new THREE.Vector3();
     box.getSize(size);
     box.getCenter(center);
-    console.log("=== BOY MODEL STATS ===");
+    console.log("=== PIXELLABS MODEL STATS ===");
     console.log("Size:", JSON.stringify(size));
     console.log("Center:", JSON.stringify(center));
   }, [scene]);
 
-  // Play subtle idle eye animation if available
-  useEffect(() => {
-    if (actions) {
-      const eyeAction = actions["idle_eyes"] || actions["idle_eyes_2"];
-      if (eyeAction) {
-        eyeAction.reset().fadeIn(0.5).play();
-      }
-    }
-  }, [actions]);
-
-  // Hide detached hand bones if present in bust avatar
-  useEffect(() => {
-    const rightHand = scene.getObjectByName("RightHand");
-    const leftHand = scene.getObjectByName("LeftHand");
-    if (rightHand) rightHand.scale.set(0, 0, 0);
-    if (leftHand) leftHand.scale.set(0, 0, 0);
-  }, [scene]);
+  // Ensure shadows and materials look crisp and high-end
   useEffect(() => {
     scene.traverse((child) => {
       if ((child as THREE.Mesh).isMesh) {
@@ -68,6 +49,7 @@ function BoyModel() {
         if (mesh.material) {
           const mat = mesh.material as THREE.MeshStandardMaterial;
           mat.envMapIntensity = 1.2;
+          mat.roughness = Math.max(mat.roughness, 0.25);
           mat.needsUpdate = true;
         }
       }
@@ -76,8 +58,8 @@ function BoyModel() {
 
   return (
     <group ref={groupRef}>
-      <Center position={[0, -0.05, 0]}>
-        <primitive object={scene} scale={4.2} />
+      <Center position={[0, 0.08, 0]}>
+        <primitive object={scene} scale={2.0} />
       </Center>
     </group>
   );
@@ -154,8 +136,8 @@ export function CharacterModel({ autoRotate = true }: CharacterModelProps) {
 
   return (
     <group ref={outerGroupRef} position={[0, 0, 0]}>
-      {/* Boy 24 Character Model */}
-      <BoyModel />
+      {/* 3D Model */}
+      <ModelViewer />
 
       {/* Floating Ember Spark Particles */}
       <points ref={particlesRef}>
@@ -184,4 +166,4 @@ export function CharacterModel({ autoRotate = true }: CharacterModelProps) {
 }
 
 // Preload model asset for immediate smooth display
-useGLTF.preload(getAssetPath(MODEL_PATH), getAssetPath(DRACO_PATH));
+useGLTF.preload(getAssetPath(MODEL_PATH));

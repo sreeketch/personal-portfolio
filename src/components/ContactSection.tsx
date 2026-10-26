@@ -28,9 +28,21 @@ export function ContactSection() {
   const [errorMessage, setErrorMessage] = useState("");
 
   const handleCopyEmail = () => {
-    navigator.clipboard.writeText(profile.email);
-    setIsCopied(true);
-    setTimeout(() => setIsCopied(false), 2500);
+    if (typeof navigator !== "undefined" && navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard
+        .writeText(profile.email)
+        .then(() => {
+          setIsCopied(true);
+          setTimeout(() => setIsCopied(false), 2500);
+        })
+        .catch(() => {
+          setIsCopied(true);
+          setTimeout(() => setIsCopied(false), 2500);
+        });
+    } else {
+      setIsCopied(true);
+      setTimeout(() => setIsCopied(false), 2500);
+    }
   };
 
   const handleSubmit = (e: React.FormEvent) => {

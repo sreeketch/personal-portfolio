@@ -36,12 +36,12 @@ export function PosterFallback({
         {/* Informative Label */}
         <div className="space-y-1 max-w-xs">
           <p className="font-display font-bold text-base sm:text-lg text-white">
-            Boy 24: Cyber Racer
+            Ironclad: Diesel Automaton
           </p>
           <div className="flex items-center justify-center gap-2 font-mono text-[11px] text-[#FF8547]">
             <span>Blender 4.2</span>
             <span>•</span>
-            <span>Custom Rig & Shaders</span>
+            <span>High-Poly Sculpt & PBR Textures</span>
           </div>
           <p className="text-[11px] text-[#768597] pt-0.5">{reason}</p>
         </div>

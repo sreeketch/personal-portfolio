@@ -40,7 +40,13 @@ export function MotionProvider({ children }: { children: React.ReactNode }) {
     }
 
     // 2. Global 3D Perspective Scroll Engine (Gives the whole website an authentic 3D spatial feel)
-    const cards3D = document.querySelectorAll<HTMLElement>('[data-3d-scroll="card"]');
+    let cards3D = Array.from(document.querySelectorAll<HTMLElement>('[data-3d-scroll="card"]'));
+    const observer = new MutationObserver(() => {
+      cards3D = Array.from(document.querySelectorAll<HTMLElement>('[data-3d-scroll="card"]'));
+    });
+    observer.observe(document.body, { childList: true, subtree: true });
+    cleanups.push(() => observer.disconnect());
+
     let animationFrameId: number;
     let targetScroll = window.scrollY;
     let currentScroll = window.scrollY;

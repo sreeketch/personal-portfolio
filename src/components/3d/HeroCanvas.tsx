@@ -13,7 +13,7 @@ export function HeroCanvas() {
   const [isClient, setIsClient] = useState(false);
   const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
-  const [forceLive, setForceLive] = useState(false);
+  const [isPosterMode, setIsPosterMode] = useState(false);
   const [autoRotate, setAutoRotate] = useState(true);
   const [isWireframe, setIsWireframe] = useState(false);
   const [webGLSupported, setWebGLSupported] = useState(true);
@@ -52,13 +52,18 @@ export function HeroCanvas() {
     };
   }, []);
 
-  // Graceful degradation decision: only fallback if WebGL is genuinely unavailable
-  const shouldShowFallback = !isClient || !webGLSupported;
+  // Graceful degradation decision: fallback if WebGL is unavailable or user toggled poster mode
+  const shouldShowFallback = !isClient || !webGLSupported || isPosterMode;
 
   if (shouldShowFallback) {
+    const reason = !webGLSupported
+      ? "WebGL is not enabled on this device"
+      : "Static preview mode active";
+
     return (
       <PosterFallback
-        reason="WebGL is not enabled on this device"
+        reason={reason}
+        onEnableLive={webGLSupported ? () => setIsPosterMode(false) : undefined}
       />
     );
   }
@@ -133,7 +138,7 @@ export function HeroCanvas() {
 
         {/* Device Switch to Poster */}
         <button
-          onClick={() => setForceLive(false)}
+          onClick={() => setIsPosterMode(true)}
           className="w-7 h-7 rounded-full flex items-center justify-center text-xs text-[#94A3B8] hover:text-white transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[#FF8547]"
           title="Switch to Static 2D Poster"
           aria-label="Switch to 2D view"
